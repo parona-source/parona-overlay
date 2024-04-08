@@ -21,3 +21,9 @@ src_test() {
 	common-lisp-export-impl-args $(common-lisp-find-lisp-impl)
 	${CL_BINARY} ${CL_EVAL} "(asdf:test-system :${PN})" || die
 }
+
+src_install() {
+	common-lisp-3_src_install
+	common-lisp-install-sources -t all version.sexp
+	einstalldocs
+}
