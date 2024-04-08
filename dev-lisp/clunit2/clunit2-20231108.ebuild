@@ -3,6 +3,8 @@
 
 EAPI=7
 
+inherit common-lisp-3
+
 DESCRIPTION="Unit Testing Framework, fork of clunit."
 HOMEPAGE="https://codeberg.org/cage/clunit2"
 COMMIT="b24c56851ee6ee6c4a9dc3725a634c06b604f207"
@@ -10,6 +12,7 @@ SRC_URI="
 	https://codeberg.org/cage/clunit2/archive/${COMMIT}.tar.gz
 		-> ${PN}-${COMMIT}.tar.gz
 "
+S="${WORKDIR}/${PN}"
 
 LICENSE="MIT"
 SLOT="0"
