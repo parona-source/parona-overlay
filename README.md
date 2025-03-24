@@ -5,6 +5,32 @@
 
 Just a couple ebuilds, quality might be varying but I want to keep it high enough.
 
+## Add the repository
+
+### With pregenerated metadata
+
+/etc/portage/repos.conf/parona-overlay.conf
+```
+[parona-overlay]
+location = /var/db/repos/parona-overlay
+sync-type = git
+sync-uri = https://gitlab.com/Parona/parona-overlay
+sync-git-clone-extra-opts = -b metadata
+```
+
+### Without pregenerated metadata
+```
+eselect repository enable parona-overlay
+```
+
+/etc/portage/repos.conf/parona-overlay.conf
+```
+[parona-overlay]
+location = /var/db/repos/parona-overlay
+sync-type = git
+sync-uri = https://gitlab.com/Parona/parona-overlay
+```
+
 ## Long term unkeyworded packages
 Also includes ebuilds that I intend to push to ::gentoo (or not), unkeyworded of course.
 
