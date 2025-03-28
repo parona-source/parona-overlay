@@ -1,0 +1,53 @@
+# This file is deprecated as per GLEP 56 in favor of metadata.xml.
+# Please add your descriptions to your package's metadata.xml ONLY.
+# * generated automatically using pmaint *
+
+app-alternatives/unzip:info-zip - Symlink to Info-ZIP unzip (app-arch/unzip)
+app-alternatives/unzip:libarchive - Symlink to bsdunzip from app-arch/libarchive
+app-arch/unzip:natspec - Use dev-libs/libnatspec to correctly decode non-ascii file names archived in Windows.
+app-containers/waydroid:nftables - Add support for net-firewall/nftables
+app-misc/parona-scripts:efibootmgr - Install installkernel hook for efibootmgr
+app-misc/parona-scripts:perl - Install perl scripts
+app-misc/parona-scripts:portage-hooks - Install portage hooks
+dev-build/cargo-make:openssl - Enable TLS support with dev-libs/openssl
+dev-build/cargo-make:rustls - Enable TLS support with rustls
+dev-db/mysql:cjk - Add CJK support for InnoDB fulltext search using app-text/mecab
+dev-db/mysql:numa - Enable NUMA support using sys-process/numactl (NUMA kernel support is also required)
+dev-db/mysql:profiling - Add support for statement profiling (requires USE=community).
+dev-db/mysql:router - Build the MySQL router program
+dev-db/mysql:server - Build the server program
+dev-db/mysql:test - Install upstream testsuites for end use.
+dev-libs/vala-language-server:gnome - Build GNOME Builder plugin
+dev-vcs/gcli:lowdown - Use lowdown to render markdown.
+games-util/gamehub:overlayfs - Build support for OverlayFS
+games-util/mangohud:mangoapp - Install mangoapp, a transparent background application with a built in mangohud.
+games-util/mangohud:plots - Install mangoplot plotting script which generates a 1D heatmap of a log files framerates.
+gnome-extra/yad:sourceview - Enable syntax highlighting in text-info dialog with x11-libs/gtksourceview:3.0
+gnome-extra/yad:spell - Enable support spell checking in text fields
+gnome-extra/yad:tools - Install extra tools such as yad-tools, yad-icon-browser, yad-settings
+gui-apps/fuzzel:nanosvg - VG image support via bundled nanosvg instead of gnome-base/librsvg
+gui-apps/qtgreet:greetwl - Build the greetwl compositor to use it instead of requiring other compositors.
+gui-apps/yambar:mpd - Enable support for the Music Player Daemon
+gui-apps/yambar:shared - Build modules, particles and decorations as shared libraries
+media-sound/spotify:local-playback - Allows playing local files with the Spotify client
+media-sound/spotify:pax-kernel - Triggers a paxmarking of the main Spotify binary
+sys-kernel/xanmod-kernel:initramfs - Build initramfs along with the kernel.
+virtual/linux-sources:firmware - Install linux kernel firmware
+www-client/icecat:clang - Use Clang compiler instead of GCC
+www-client/icecat:geckodriver - Enable WebDriver support
+www-client/icecat:hwaccel - Force-enable hardware-accelerated rendering (Mozilla bug 594876)
+www-client/icecat:libproxy - Enable libproxy support
+www-client/icecat:lto - Enable Link Time Optimization (LTO). Requires Gold linker when using GCC or LDD linker when using Clang
+www-client/icecat:openh264 - Use media-libs/openh264 for H.264 support instead of downloading binary blob from Mozilla at runtime
+www-client/icecat:pgo - Add support for profile-guided optimization using gcc-4.5, for faster binaries. This option will double the compile time.
+www-client/icecat:screencast - Enable support for remote desktop and screen cast using media-video/pipewire
+www-client/icecat:sndio - Enable support for the media-sound/sndio backend
+www-client/icecat:system-av1 - Use the system-wide media-libs/dav1d and media-libs/libaom library instead of bundled.
+www-client/icecat:system-harfbuzz - Use the system-wide media-libs/harfbuzz and media-gfx/graphite2 instead of bundled.
+www-client/icecat:system-icu - Use the system-wide dev-libs/icu instead of bundled.
+www-client/icecat:system-jpeg - Use the system-wide media-libs/libjpeg-turbo instead of bundled.
+www-client/icecat:system-libevent - Use the system-wide dev-libs/libevent instead of bundled.
+www-client/icecat:system-libvpx - Use the system-wide media-libs/libvpx instead of bundled.
+www-client/icecat:system-png - Use the system-wide media-libs/libpng instead of bundled (requires APNG patches)
+www-client/icecat:system-python-libs - Use system's python site instead of bundled python libraries
+www-client/icecat:system-webp - Use the system-wide media-libs/libwebp instead of bundled.
