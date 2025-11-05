@@ -44,7 +44,7 @@ RDEPEND="
 	dev-libs/libfmt:=
 	dev-libs/spdlog:=
 	dev-qt/qtbase:6[concurrent,network,widgets]
-	sys-libs/zlib
+	virtual/zlib
 	sys-libs/minizip-ng:=
 "
 DEPEND="

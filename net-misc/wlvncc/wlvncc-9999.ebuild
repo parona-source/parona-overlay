@@ -38,7 +38,7 @@ RDEPEND="
 	media-libs/mesa
 	media-video/ffmpeg:=
 	net-libs/gnutls:=
-	sys-libs/zlib
+	virtual/zlib
 	x11-libs/libdrm
 	x11-libs/libxkbcommon
 	x11-libs/pixman

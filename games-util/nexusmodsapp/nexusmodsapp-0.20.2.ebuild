@@ -785,7 +785,7 @@ COMMON_DEPEND="
 	app-arch/lz4
 	app-arch/snappy
 	app-arch/zstd
-	sys-libs/zlib
+	virtual/zlib
 "
 RDEPEND="
 	${COMMON_DEPEND}
