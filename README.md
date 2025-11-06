@@ -25,7 +25,7 @@ sync-type = git
 sync-uri = https://gitlab.com/Parona/parona-overlay
 ```
 
-## Generating metadata for repositories (recommended)
+## Generating metadata cache for repositories (recommended)
 
 Here is a simple posthook that you can use which utilises pmaint (from sys-apps/pkgcore) which is a **lot** faster than egencache. To use you would have to copy it into the location and give it executable permissions.
 
