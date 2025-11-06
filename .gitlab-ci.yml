@@ -54,12 +54,13 @@ pkgcheck_merge:
 
 metadata:
   stage: deploy
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
-      variables:
-        METADATA_BRANCH: "metadata_test"
-      when: manual
+  when: manual
+  #rules:
+  #  - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  #  - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
+  #    variables:
+  #      METADATA_BRANCH: "metadata_test"
+  #    when: manual
   dependencies:
     - pkgcheck_ci
   variables:
