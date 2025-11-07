@@ -27,6 +27,8 @@ sync-uri = https://gitlab.com/Parona/parona-overlay
 
 ## Generating metadata cache for repositories (recommended)
 
+https://wiki.gentoo.org/wiki//etc/portage/repo.postsync.d
+
 Here is a simple posthook that you can use which utilises pmaint (from sys-apps/pkgcore) which is a **lot** faster than egencache. To use you would have to copy it into the location and give it executable permissions.
 
 /etc/portage/repo.postsync.d/99-generate-cache
