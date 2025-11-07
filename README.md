@@ -62,7 +62,7 @@ fi
 exit "${ret}"
 ```
 
-[I use this hook myself which also supports pkgcruft but only works for git repos.](https://gitlab.com/Parona/parona-scripts/-/blob/master/portage-hooks/repo.postsync.d/generate-cache.sh)
+[I use this hook myself which also supports pkgcraft but only works for git repos.](https://gitlab.com/Parona/parona-scripts/-/blob/master/portage-hooks/repo.postsync.d/generate-cache.sh)
 
 ### To learn more about hooks:
 
