@@ -1,7 +1,7 @@
 
 # Personal Gentoo overlay
 
-[![pipeline status](https://gitlab.com/Parona/parona-overlay/badges/master/pipeline.svg)](https://gitlab.com/Parona/parona-overlay/-/commits/master) 
+[![pipeline status](https://gitlab.com/Parona/parona-overlay/badges/master/pipeline.svg)](https://gitlab.com/Parona/parona-overlay/-/commits/master)
 
 Just a couple ebuilds, quality might be varying but I want to keep it high enough.
 
@@ -98,4 +98,4 @@ Also includes ebuilds that I intend to push to ::gentoo (or not), unkeyworded of
 	- Easier to keep up to date locally and it started diverging...
 * games-util/nexusmodsapp
 	- https://gitlab.com/Parona/parona-overlay/-/issues/2
-	- "This is alpha software, meaning it's still very early in development and may have bugs or issues that could break your mod setup. We've done our best to patch up any major problems, but there will always be a few "gotchas" we haven't accounted for." - https://nexus-mods.github.io/NexusMods.App/users/ 
+	- "This is alpha software, meaning it's still very early in development and may have bugs or issues that could break your mod setup. We've done our best to patch up any major problems, but there will always be a few "gotchas" we haven't accounted for." - https://nexus-mods.github.io/NexusMods.App/users/
