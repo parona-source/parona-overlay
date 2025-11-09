@@ -1,17 +1,7 @@
 image:  ghcr.io/pkgcore/pkgcheck:latest
 
-
-# Requirements:
-# * A project access token with read_repository and write_repository scopes
-# * GITLAB_TOKEN (the token itself)
-# * GITLAB_TOKEN_NAME (the name of the user commiting, GitLab creates fake users with the name @project_<project_id>_bot_<random_hash>)
-
-# Optional variables:
-# * METADATA_BRANCH otherwise "metadata"
-
 stages:
   - check
-  - deploy
 
 .pkgcheck: &pkgcheck
   stage: check
@@ -39,11 +29,6 @@ pkgcheck_ci:
     name: metadata
     paths:
       - metadata/md5-cache
-      - metadata/pkg_desc_index
-      - profiles/use.local.desc
-  variables:
-    # For reuse in the metadata deploy job
-    PMAINT_ARGS: "--use-local-desc --pkg-desc-index"
 
 pkgcheck_merge:
   <<: *pkgcheck
@@ -52,41 +37,3 @@ pkgcheck_merge:
   variables:
     PKGCHECK_ARGS: "--commits $CI_MERGE_REQUEST_DIFF_BASE_SHA..$CI_COMMIT_SHA"
 
-metadata:
-  stage: deploy
-  when: manual
-  #rules:
-  #  - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-  #  - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
-  #    variables:
-  #      METADATA_BRANCH: "metadata_test"
-  #    when: manual
-  dependencies:
-    - pkgcheck_ci
-  variables:
-    GIT_STRATEGY: clone
-    GIT_DEPTH: 1
-  before_script:
-    - |-
-      if git ls-remote --exit-code origin "${METADATA_BRANCH:-metadata}"; then
-        git fetch origin "${METADATA_BRANCH:-metadata}"
-      fi
-    - git config --global user.email "${GITLAB_TOKEN_NAME}@noreply.gitlab.com"
-    - git config --global user.name "${GITLAB_TOKEN_NAME}"
-  script:
-    - git stash push --all -- metadata/md5-cache metadata/pkg_desc_index profiles/use.local.desc
-    - |-
-      if git ls-remote --exit-code origin "${METADATA_BRANCH:-metadata}"; then
-        git merge -s ours --allow-unrelated-histories -m "Merge ${CI_COMMIT_SHA}" "origin/${METADATA_BRANCH:-metadata}"
-        git branch -f "${METADATA_BRANCH:-metadata}" HEAD
-      fi
-    - git checkout "${METADATA_BRANCH:-metadata}"
-    - git stash pop
-    - git add -f metadata/md5-cache metadata/pkg_desc_index profiles/use.local.desc
-    - |-
-      CHANGES=$(git status --porcelain | wc -l)
-      if [[ ${CHANGES} -gt 0 ]]; then
-        git status
-        git commit -m "$(date "+%F %R %Z")"
-      fi
-    - git push "https://${GITLAB_TOKEN_NAME}:${GITLAB_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git" "${METADATA_BRANCH:-metadata}" -o ci.skip
