@@ -27,9 +27,10 @@ sync-uri = https://gitlab.com/Parona/parona-overlay
 
 ## Generating metadata cache for repositories (recommended)
 
-https://wiki.gentoo.org/wiki//etc/portage/repo.postsync.d
 
 Here is a simple posthook that you can use which utilises pmaint (from sys-apps/pkgcore) which is a **lot** faster than egencache. To use you would have to copy it into the location and give it executable permissions.
+
+This is now in the wiki as well https://wiki.gentoo.org/wiki//etc/portage/repo.postsync.d
 
 /etc/portage/repo.postsync.d/99-generate-cache
 ```bash
@@ -37,13 +38,26 @@ Here is a simple posthook that you can use which utilises pmaint (from sys-apps/
 # Make it executable (chmod +x) for Portage to process it.
 # Requires sys-apps/pkgcore for pmaint
 
+# Your hook can control it's actions depending on any of the three
+# parameters passed in to it.
+#
+# They are as follows:
+#
+# The repository name.
 repository_name=${1}
+# The URI to which the repository was synced.
 sync_uri=${2}
+# The path to the repository.
 repository_path=${3}
 
+# Portage assumes that a hook succeeded if it exits with 0 code. If no
+# explicit exit is done, the exit code is the exit code of last spawned
+# command. Since our script is a bit more complex, we want to control
+# the exit code explicitly.
 ret=0
 
-if [ -n "${repository_name}" ]; then
+if [[ -n "${repository_name}" ]]; then
+	# Repository name was provided, so we're in a post-repository hook.
 	echo "* In post-repository hook for ${repository_name}"
 	echo "** synced from remote repository ${sync_uri}"
 	echo "** synced into ${repository_path}"
@@ -51,9 +65,10 @@ if [ -n "${repository_name}" ]; then
 	# Gentoo, Guru, kde and science come with pregenerated cache but the other repositories usually don't.
 	# Generate them to improve performance.
 	# https://www.gentoo.org/support/news-items/2025-10-07-cache-enabled-mirrors-removal.html
-	if [[ "${repository_name}" != "gentoo" ]] && [[ "${repository_name}" != "guru" ]] && [[ "${repository_name}" != "kde" ]] && [[ "${repository_name}" != "science" ]]
+	if [[ "${repository_name}" != "gentoo" ]] && [[ "${repository_name}" != "guru" ]] && \
+		[[ "${repository_name}" != "kde" ]] && [[ "${repository_name}" != "science" ]]
 	then
-		if ! pmaint regen "${repository_name}" -t $(nproc) --pkg-desc-index --use-local-desc ${PORTAGE_VERBOSE+--verbose}
+		if ! pmaint regen "${repository_name}" --threads $(nproc) --pkg-desc-index --use-local-desc ${PORTAGE_VERBOSE+--verbose}
 		then
 			echo "!!! pmaint regen failed!"
 			ret=1
