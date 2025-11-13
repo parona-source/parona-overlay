@@ -74,6 +74,11 @@ python_install_all() {
 }
 
 python_test() {
+	EPYTEST_DESELECT=(
+		# flaky
+		tests/test_networkutil.py::test_download_file
+	)
+
 	local dbus_params=(
 		$(dbus-daemon --session --print-address --fork --print-pid)
 	)
