@@ -1,0 +1,19 @@
+From bbb73654b3d92bc6bed97cb724827a02da4f02d9 Mon Sep 17 00:00:00 2001
+From: Arthur Van Duynhoven <arthur.vanduynhoven@irdeto.com>
+Date: Tue, 20 Aug 2024 10:34:22 +0200
+Subject: [PATCH] Issue #468 - Include reserved flags as part of Features flag
+ options
+
+Signed-off-by: Arthur Van Duynhoven <arthur.vanduynhoven@irdeto.com>
+--- a/pgpy/constants.py
++++ b/pgpy/constants.py
+@@ -564,6 +564,9 @@ class KeyFlags(FlagEnum):
+ 
+ class Features(FlagEnum):
+     ModificationDetection = 0x01
++    _reserved_1 = 0x02
++    _reserved_2 = 0x04
++    ModificationDetectionV2 = 0x08
+ 
+     @classproperty
+     def pgpy_features(cls):
