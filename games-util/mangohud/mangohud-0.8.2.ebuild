@@ -90,6 +90,7 @@ fi
 
 PATCHES=(
 	"${FILESDIR}"/mangohud-0.8.2-fix-llvm.patch
+	"${FILESDIR}"/mangohud-0.8.2-gcc16-header.patch
 )
 
 python_check_deps() {
