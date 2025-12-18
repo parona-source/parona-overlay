@@ -1,0 +1,24 @@
+https://github.com/flightlessmango/MangoHud/issues/1872
+https://github.com/flightlessmango/MangoHud/pull/1873
+
+From 197e4093e4f7ba3deeb12a5e4fc90bf39aea0fc9 Mon Sep 17 00:00:00 2001
+From: Etaash Mathamsetty
+ <45927311+Etaash-mathamsetty@users.noreply.github.com>
+Date: Fri, 28 Nov 2025 11:46:10 -0600
+Subject: [PATCH] egl: Fix missing check for HAVE_WAYLAND.
+
+--- a/src/gl/inject_egl.cpp
++++ b/src/gl/inject_egl.cpp
+@@ -239,10 +239,12 @@ EXPORT_C_(int) eglTerminate(void *display)
+ 
+     ret = pfn_eglTerminate(display);
+ 
++#ifdef HAVE_WAYLAND
+     if (ret)
+     {
+         wayland_data_unref(NULL, display);
+     }
++#endif
+ 
+     return ret;
+ }
