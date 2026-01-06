@@ -1,0 +1,24 @@
+https://gitlab.melroy.org/melroy/winegui/-/commit/a85f9f3f425a0bdca64687d706de078cdcf6fd31
+https://github.com/winegui/WineGUI/pull/43
+
+From 31bb3a94ef55efa0dadbad1d59d750e82a35a5d0 Mon Sep 17 00:00:00 2001
+From: Alfred Wingate <parona@protonmail.com>
+Date: Mon, 5 Jan 2026 05:36:08 +0200
+Subject: [PATCH] Missing implicit include for gcc-16
+
+Used for std::mutex
+
+Signed-off-by: Alfred Wingate <parona@protonmail.com>
+--- a/include/main_window.h
++++ b/include/main_window.h
+@@ -32,6 +32,7 @@
+ #include <list>
+ #include <string>
+ #include <thread>
++#include <mutex>
+ #include <vector>
+ 
+ using std::cout;
+-- 
+2.52.0
+
