@@ -1,2 +1,8 @@
 # Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
+
+# Alfred Wingate <parona@protonmail.com> (2025-10-06)
+# Mask for testing
+# https://github.com/parona-source/gentoo/tree/mysql-slot
+app-eselect/eselect-mysql
+dev-db/mysql
