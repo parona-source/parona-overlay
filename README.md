@@ -99,3 +99,5 @@ Also includes ebuilds that I intend to push to ::gentoo (or not), unkeyworded of
 * games-util/nexusmodsapp
 	- https://gitlab.com/Parona/parona-overlay/-/issues/2
 	- "This is alpha software, meaning it's still very early in development and may have bugs or issues that could break your mod setup. We've done our best to patch up any major problems, but there will always be a few "gotchas" we haven't accounted for." - https://nexus-mods.github.io/NexusMods.App/users/
+* dev-db/mysql and app-eselect/eselect-mysql
+	- WIP: https://github.com/parona-source/gentoo/tree/mysql-slot
