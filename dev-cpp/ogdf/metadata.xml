@@ -5,6 +5,9 @@
 		<email>parona@protonmail.com</email>
 		<name>Alfred Wingate</name>
 	</maintainer>
+	<use>
+		<flag name="cgal">Build components that require <pkg>sci-mathematics/cgal</pkg></flag>
+	</use>
 	<upstream>
 		<remote-id type="github">ogdf/ogdf</remote-id>
 	</upstream>
