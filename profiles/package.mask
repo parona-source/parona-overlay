@@ -10,3 +10,9 @@ games-util/limo
 # Dependency media-libs/phonon masked for removal
 # https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=e8420fb3b8d3cebc616479c6d2a71a02c872238e
 media-libs/phonon-mpv
+
+# Alfred Wingate <parona@protonmail.com> (2025-10-06)
+# Mask for testing
+# https://github.com/parona-source/gentoo/tree/mysql-slot
+app-eselect/eselect-mysql
+dev-db/mysql
