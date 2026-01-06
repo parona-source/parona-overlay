@@ -1,0 +1,23 @@
+Modified from https://github.com/herrhotzenplotz/ports-overlay/blob/0cb4399b499ccdf1b1bb5214b710aa81521d38f6/textproc/pdjson/files/patch-Makefile
+
+--- a/Makefile
++++ b/Makefile
+@@ -1,8 +1,8 @@
+ .POSIX:
+-CC     = cc
+-CFLAGS = -std=c99 -pedantic -Wall -Wextra -Wno-missing-field-initializers
++CC     ?= cc
++CFLAGS += -std=c99 -pedantic -Wall -Wextra -Wno-missing-field-initializers -fPIC
+ 
+-all: tests/pretty tests/stream tests/tests
++all: libpdjson.so tests/pretty tests/stream tests/tests
+ 
+ tests/pretty: tests/pretty.o pdjson.o
+ 	$(CC) $(LDFLAGS) -o $@ tests/pretty.o pdjson.o $(LDLIBS)
+@@ -28,3 +28,6 @@ clean:
+ 
+ .c.o:
+ 	$(CC) -c $(CFLAGS) -o $@ $<
++
++libpdjson.so: pdjson.o
++	$(CC) $(CFLAGS) $(LDFLAGS) -shared -o libpdjson.so pdjson.o
