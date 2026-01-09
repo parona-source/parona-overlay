@@ -46,19 +46,8 @@ RDEPEND="
 "
 
 src_install() {
-	emake DESTDIR="${D}" install
-
-	if use efibootmgr; then
-		emake DESTDIR="${D}" efibootmgr
-	fi
-
-	if use perl; then
-		emake DESTDIR="${D}" perl
-	fi
-
-	if use portage-hooks; then
-		emake DESTDIR="${D}" portage_hooks
-	fi
+	emake DESTDIR="${D}" prefix="${EPREFIX}/usr" sysconfdir="${EPREFIX}/etc" \
+		install $(usev efibootmgr install-efibootmgr) $(usev perl install-perl) $(usev portage-hooks install-portage-hooks)
 }
 
 pkg_postinst() {
