@@ -551,6 +551,10 @@ src_prepare() {
 	eapply "${WORKDIR}/firefox-patches"
 	use loong && eapply "${WORKDIR}/firefox-loong-patches"
 
+	if use system-icu && has_version ">=dev-libs/icu-78.1"; then
+		eapply "${FILESDIR}/firefox-146.0.1-icu78.patch" # in 147, bug #967261
+	fi
+
 	# Allow user to apply any additional patches without modifing ebuild
 	eapply_user
 
