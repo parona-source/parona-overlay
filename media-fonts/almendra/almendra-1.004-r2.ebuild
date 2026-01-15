@@ -11,13 +11,13 @@ DESCRIPTION="Almendra is a typeface design based on calligraphy"
 HOMEPAGE="https://github.com/google/fonts"
 SRC_URI="
 	https://github.com/google/fonts/raw/${COMMIT}/ofl/almendra/Almendra-Bold.ttf
-		-> Almendra-Bold-${COMMIT}.ttf
+		-> Almendra-Bold-${COMMIT}.ttf-r1
 	https://github.com/google/fonts/raw/${COMMIT}/ofl/almendra/Almendra-BoldItalic.ttf
-		-> Almendra-BoldItalic-${COMMIT}.ttf
+		-> Almendra-BoldItalic-${COMMIT}.ttf-r1
 	https://github.com/google/fonts/raw/${COMMIT}/ofl/almendra/Almendra-Italic.ttf
-		-> Almendra-Italic-${COMMIT}.ttf
+		-> Almendra-Italic-${COMMIT}.ttf-r1
 	https://github.com/google/fonts/raw/${COMMIT}/ofl/almendra/Almendra-Regular.ttf
-		-> Almendra-Regular-${COMMIT}.ttf
+		-> Almendra-Regular-${COMMIT}.ttf-r1
 	https://github.com/google/fonts/raw/${COMMIT}/ofl/almendra/DESCRIPTION.en_us.html
 		-> ${PN}-${COMMIT}-DESCRIPTION.en_us.html-r1
 	https://github.com/google/fonts/raw/${COMMIT}/ofl/almendra/FONTLOG.txt
@@ -38,7 +38,7 @@ DOCS=( DESCRIPTION.en_us.html FONTLOG.txt METADATA.pb )
 
 src_unpack() {
 	for type in Bold BoldItalic Italic Regular; do
-		cp "${DISTDIR}"/Almendra-${type}-${COMMIT}.ttf Almendra-${type}.ttf || die
+		cp "${DISTDIR}"/Almendra-${type}-${COMMIT}.ttf-r1 Almendra-${type}.ttf || die
 	done
 	for file in DESCRIPTION.en_us.html FONTLOG.txt METADATA.pb; do
 		cp "${DISTDIR}"/${PN}-${COMMIT}-${file}-r1 ${file} || die
