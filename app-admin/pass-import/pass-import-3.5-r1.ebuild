@@ -85,13 +85,14 @@ python_test() {
 src_install() {
 	distutils-r1_src_install
 
+	exeinto /usr/lib/password-store/extensions
+	doexe import.bash
+
 	doman share/man/man1/pass-import.1 share/man/man1/pimport.1
 	dobashcomp share/bash-completion/completions/pass-import \
 		share/bash-completion/completions/pimport
 	dozshcomp share/zsh/site-functions/_pass-import \
 		share/zsh/site-functions/_pimport
-
-	# import.bash seems vestigial from when pass-import was a shell script
 }
 
 pkg_postinst() {
