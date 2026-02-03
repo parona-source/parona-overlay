@@ -17,4 +17,5 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 BDEPEND="
 	dev-perl/Module-Build
+	dev-perl/Module-Install
 "
