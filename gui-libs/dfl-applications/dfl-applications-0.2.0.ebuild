@@ -23,13 +23,13 @@ RESTRICT="test" # no tests
 
 RDEPEND="
 	qt5? (
-		gui-libs/dfl-ipc[qt5]
+		gui-libs/dfl-ipc[qt5(-)]
 		dev-qt/qtcore:5
 		dev-qt/qtgui:5
 		dev-qt/qtwidgets:5
 	)
 	qt6? (
-		gui-libs/dfl-ipc[qt6]
+		gui-libs/dfl-ipc[qt6(+)]
 		dev-qt/qtbase:6[gui,widgets]
 	)
 "
