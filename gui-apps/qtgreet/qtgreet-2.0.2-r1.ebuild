@@ -28,7 +28,7 @@ RDEPEND="
 	)
 	qt6? (
 		dev-qt/qtbase:6[gui,dbus,opengl,widgets]
-		gui-libs/dfl-applications[qt6]
+		gui-libs/dfl-applications[qt6(+)]
 		gui-libs/dfl-ipc[qt6(+)]
 		gui-libs/dfl-login1[qt6(+)]
 		gui-libs/dfl-utils[qt6(+)]
@@ -39,7 +39,7 @@ RDEPEND="
 		dev-qt/qtdbus:5
 		dev-qt/qtgui:5
 		dev-qt/qtwidgets:5
-		gui-libs/dfl-applications[qt5]
+		gui-libs/dfl-applications[qt5(-)]
 		gui-libs/dfl-ipc[qt5(-)]
 		gui-libs/dfl-login1[qt5(-)]
 		gui-libs/dfl-utils[qt5(-)]
