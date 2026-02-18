@@ -53,6 +53,7 @@ BDEPEND="
 		dev-python/prometheus-client[${PYTHON_USEDEP}]
 		dev-python/psutil[${PYTHON_USEDEP}]
 		dev-python/psycopg:0[${PYTHON_USEDEP}]
+		dev-python/pydantic-extra-types[${PYTHON_USEDEP}]
 		dev-python/redis[${PYTHON_USEDEP}]
 		dev-python/starlette[${PYTHON_USEDEP}]
 		dev-python/structlog[${PYTHON_USEDEP}]
