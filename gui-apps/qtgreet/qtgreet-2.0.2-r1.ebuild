@@ -32,7 +32,7 @@ RDEPEND="
 		gui-libs/dfl-ipc[qt6(+)]
 		gui-libs/dfl-login1[qt6(+)]
 		gui-libs/dfl-utils[qt6(+)]
-		gui-libs/wayqt[qt6]
+		gui-libs/wayqt[qt6(+)]
 	)
 	!qt6? (
 		dev-qt/qtcore:5
@@ -43,7 +43,7 @@ RDEPEND="
 		gui-libs/dfl-ipc[qt5(-)]
 		gui-libs/dfl-login1[qt5(-)]
 		gui-libs/dfl-utils[qt5(-)]
-		gui-libs/wayqt[qt5]
+		gui-libs/wayqt[qt5(-)]
 	)
 "
 DEPEND="${RDEPEND}"
