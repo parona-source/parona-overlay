@@ -3,12 +3,13 @@
 
 EAPI=8
 
-inherit meson
+inherit meson verify-sig
 
 DESCRIPTION="A Wayland kiosk"
 HOMEPAGE="https://www.hjdskes.nl/projects/cage/"
 SRC_URI="
 	https://github.com/cage-kiosk/cage/releases/download/v${PV}/${P}.tar.gz
+	verify-sig? ( https://github.com/cage-kiosk/cage/releases/download/v${PV}/${P}.tar.gz.sig )
 "
 
 LICENSE="MIT"
@@ -30,7 +31,10 @@ RDEPEND="${DEPEND}"
 BDEPEND="
 	dev-util/wayland-scanner
 	>=app-text/scdoc-1.9.2
+	verify-sig? ( sec-keys/openpgp-keys-emersion )
 "
+
+VERIFY_SIG_OPENPGP_KEY_PATH="/usr/share/openpgp-keys/emersion.asc"
 
 src_configure() {
 	local emesonargs=(
