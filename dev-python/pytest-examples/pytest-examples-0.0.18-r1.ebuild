@@ -5,13 +5,13 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
 PYTHON_COMPAT=( python3_{12..14} )
-
+PYPI_VERIFY_REPO=https://github.com/pydantic/pytest-examples
 inherit distutils-r1 pypi
 
 DESCRIPTION="Pytest plugin for testing Python code examples in docstrings and markdown files."
 HOMEPAGE="
-	https://pypi.org/project/pytest-examples/
 	https://github.com/pydantic/pytest-examples/
+	https://pypi.org/project/pytest-examples/
 "
 
 LICENSE="MIT"
