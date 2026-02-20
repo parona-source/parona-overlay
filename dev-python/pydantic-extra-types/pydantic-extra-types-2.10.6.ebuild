@@ -5,12 +5,12 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
 PYTHON_COMPAT=( python3_{12..14} )
-
+PYPI_VERIFY_REPO=https://github.com/pydantic/pydantic-extra-types
 inherit distutils-r1 optfeature pypi
 
 DESCRIPTION="Extra Pydantic types"
 HOMEPAGE="
-	https://github.com/pydantic/pydantic-extra-types
+	https://github.com/pydantic/pydantic-extra-types/
 	https://pypi.org/project/pydantic-extra-types/
 "
 
