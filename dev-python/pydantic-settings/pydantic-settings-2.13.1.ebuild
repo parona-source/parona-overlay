@@ -5,13 +5,13 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
 PYTHON_COMPAT=( python3_{12..13} )
-
+PYPI_VERIFY_REPO=https://github.com/pydantic/pydantic-settings
 inherit distutils-r1 optfeature pypi
 
 DESCRIPTION="Settings management using pydantic"
 HOMEPAGE="
+	https://github.com/pydantic/pydantic-settings/
 	https://pypi.org/project/pydantic-settings/
-	https://github.com/pydantic/pydantic-settings
 "
 
 LICENSE="MIT"
