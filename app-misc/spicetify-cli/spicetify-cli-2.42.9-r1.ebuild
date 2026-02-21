@@ -8,7 +8,7 @@ inherit go-module
 MY_PN="cli"
 
 WHITELIST_VERSIONS=(
-	"<> 1.2.14 1.2.83"
+	"<> 1.2.14 1.2.79"
 )
 
 whitelist_versions() {
@@ -65,7 +65,7 @@ KEYWORDS="~amd64"
 # no tests
 RESTRICT="test"
 
-RDEPEND="
+RDEPEND+="
 	sys-process/procps
 	x11-apps/xrdb
 	x11-misc/xdg-utils
