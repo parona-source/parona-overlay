@@ -550,7 +550,9 @@ src_prepare() {
 	eapply "${WORKDIR}/firefox-patches"
 	use loong && eapply "${WORKDIR}/firefox-loong-patches"
 
-	eapply "${FILESDIR}/icecat-140.7.1-glibc-2.43.patch"
+	if has_version ">=sys-libs/glibc-2.43"; then
+		eapply "${FILESDIR}/icecat-140.7.1-glibc-2.43.patch"
+	fi
 
 	if use system-icu && has_version ">=dev-libs/icu-78.1"; then
 		eapply "${FILESDIR}/firefox-146.0.1-icu78.patch" # in 147, bug #967261, bgo#967261
