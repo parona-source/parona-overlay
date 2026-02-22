@@ -1,0 +1,54 @@
+# Copyright 2022-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+PYTHON_COMPAT=( python3_{12..14} )
+inherit linux-info python-single-r1 xdg
+
+DESCRIPTION="Container-based approach to boot a full Android system"
+HOMEPAGE="https://waydro.id/"
+SRC_URI="https://github.com/waydroid/waydroid/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
+
+LICENSE="GPL-3"
+SLOT="0"
+KEYWORDS="~amd64"
+
+IUSE="nftables"
+RESTRICT="test" # no tests
+
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
+
+RDEPEND="
+	${PYTHON_DEPS}
+	$(python_gen_cond_dep '
+		dev-python/dbus-python[${PYTHON_USEDEP}]
+		>=dev-python/gbinder-1.3.0[${PYTHON_USEDEP}]
+		dev-python/pygobject[${PYTHON_USEDEP}]
+		dev-python/pyclip[${PYTHON_USEDEP}]
+	')
+	app-containers/lxc[apparmor,tools]
+"
+
+# TODO: kernel config requirements
+CONFIG_CHECK=""
+
+src_prepare() {
+	default
+	python_fix_shebang waydroid.py tools
+}
+
+src_compile() {
+	:
+}
+
+src_install() {
+	emake \
+		DESTDIR="${D}" SYSCONFDIR="${EPREFIX}/etc" PREFIX="${EPREFIX}/usr" \
+		USE_SYSTEMD=1 USE_DBUS_ACTIVATION=1 USE_NFTABLES=$(usex nftables 1 0) \
+		install install_apparmor
+
+	python_optimize "${D}"/usr/lib/waydroid
+
+	newinitd "${FILESDIR}"/waydroid.initd waydroid
+}
