@@ -1,0 +1,11 @@
+#!/sbin/openrc-run
+# Copyright 2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+name="${RC_SVCNAME} daemon"
+description="Sophisticated low memory handler"
+command=@@TARGET_SBINDIR@@/nohang
+command_args="--monitor --config @@TARGET_SYSCONFDIR@@/nohang/${RC_SVCNAME}.conf"
+command_background=yes
+pidfile="/var/run/${RC_SCVNAME}.pid"
+output_logger="logger -p daemon.info -t ${RC_SVCNAME}.stdout --"

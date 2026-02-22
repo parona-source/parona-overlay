@@ -1,0 +1,23 @@
+From 6e1d12d2ff1e6eba06115f54087ef4128c3c6b11 Mon Sep 17 00:00:00 2001
+From: Alfred Wingate <parona@protonmail.com>
+Date: Wed, 24 Dec 2025 22:46:51 +0200
+Subject: [PATCH] Use runuser instead of sudo
+
+runuser works fine as nohang is run as root.
+
+Signed-off-by: Alfred Wingate <parona@protonmail.com>
+--- a/src/nohang
++++ b/src/nohang
+@@ -440,7 +440,8 @@ def send_notification(title, body):
+             dbus_value = dbus_tuple[2]
+ 
+             cmd = [
+-                'sudo', '-u', username,
++                'runuser', '-u', username,
++                '--',
+                 'env',
+                 'DISPLAY=' + display_value,
+                 'DBUS_SESSION_BUS_ADDRESS=' + dbus_value,
+-- 
+2.52.0
+
