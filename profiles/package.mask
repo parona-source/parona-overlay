@@ -1,2 +1,7 @@
-# Copyright 1999-2025 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
+
+# Alfred Wingate <parona@protonmail.com> (2026-02-25)
+# Dependency media-libs/phonon masked for removal
+# https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=e8420fb3b8d3cebc616479c6d2a71a02c872238e
+media-libs/phonon-mpv
