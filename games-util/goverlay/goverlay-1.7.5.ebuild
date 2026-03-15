@@ -12,7 +12,7 @@ DESCRIPTION="Graphical UI to help manage Linux overlays."
 HOMEPAGE="https://github.com/benjamimgois/goverlay"
 SRC_URI="
 	https://github.com/benjamimgois/goverlay/archive/refs/tags/${MY_PV}.tar.gz
-		-> ${PN}-${MY_PV}.tar.gz
+		-> ${PN}-${MY_PV}-r1.tar.gz
 "
 S="${WORKDIR}/${PN}-${MY_PV}"
 
