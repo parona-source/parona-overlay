@@ -18,11 +18,6 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
 
-BDEPEND="
-	<dev-python/setuptools-81[${PYTHON_USEDEP}]
-	>=dev-python/setuptools-59[${PYTHON_USEDEP}]
-"
-
 EPYTEST_IGNORE=(
 	# avoid pytest-benchmark
 	"tests/benchmarks/"
