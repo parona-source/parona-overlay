@@ -9,7 +9,4 @@
 		<remote-id type="gitlab">marcusbritanicus/QtGreet</remote-id>
 		<remote-id type="github">marcusbritanicus/QtGreet</remote-id>
 	</upstream>
-	<use>
-		<flag name="greetwl">Build the greetwl compositor to use it instead of requiring other compositors.</flag>
-	</use>
 </pkgmetadata>
