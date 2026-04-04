@@ -51,5 +51,5 @@ src_install() {
 
 pkg_postinst() {
 	optfeature "easier authentication" dev-python/pyqt6-webengine
-	optfeature "display QR codes in terminal" dev-python/qrcore
+	optfeature "display QR codes in terminal" dev-python/qrcode
 }
