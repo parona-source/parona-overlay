@@ -1,0 +1,64 @@
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1469d50..1b21712 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -122,7 +122,7 @@ set(SOURCES
+   ${HEADERS}
+ )
+ 
+-if(NOT UNITTEST)
++if(TRUE)
+   # Install and recompile glib gsettings schema
+   add_schema("org.melroy.winegui.gschema.xml" GSCHEMA_RING)
+ 
+@@ -159,7 +159,10 @@ if(NOT UNITTEST)
+     COMMENT "Starting up..." )
+ 
+ ## Below for Unit testing only ##
+-else()
++endif()
++if(UNITTEST)
++  enable_testing()
++
+   # Build separate libraries for unit testing
+   add_library(${PROJECT_TEST_TARGET_LIB}-bottle-config STATIC 
+     src/bottle_config_file.cc
+diff --git a/tst/CMakeLists.txt b/tst/CMakeLists.txt
+index 1108b4e..77bd45b 100644
+--- a/tst/CMakeLists.txt
++++ b/tst/CMakeLists.txt
+@@ -2,12 +2,11 @@ include(FetchContent)
+ FetchContent_Declare(
+   googletest
+   URL https://github.com/google/googletest/archive/52eb8108c5bdec04579160ae17225d66034bd723.zip
++  FIND_PACKAGE_ARGS NAMES GTest
+ )
+ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+ FetchContent_MakeAvailable(googletest)
+ 
+-enable_testing()
+-
+ add_executable(bottle_config_migration_test
+   bottle_config_migration_test.cc
+ )
+@@ -19,7 +18,7 @@ target_include_directories(bottle_config_migration_test PRIVATE
+ )
+ target_link_libraries(bottle_config_migration_test PRIVATE
+   ${PROJECT_TEST_TARGET_LIB}-bottle-config
+-  gtest_main
++  GTest::gtest_main
+ )
+ add_test(NAME bottle_config_migration_test COMMAND bottle_config_migration_test)
+ 
+@@ -34,7 +33,7 @@ target_include_directories(helper_test PRIVATE
+ )
+ target_link_libraries(helper_test PRIVATE
+   ${PROJECT_TEST_TARGET_LIB}-bottle-config
+-  gtest_main
++  GTest::gtest_main
+ )
+ add_test(NAME helper_test COMMAND helper_test)
+ 
+
