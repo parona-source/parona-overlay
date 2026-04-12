@@ -32,7 +32,7 @@ RDEPEND="
 "
 BDEPEND="
 	<dev-python/cython-4.0.0[${PYTHON_USEDEP}]
-	>=dev-python/cython-0.29.24[${PYTHON_USEDEP}]
+	>=dev-python/cython-3.2.1[${PYTHON_USEDEP}]
 	test? (
 		dev-python/distro[${PYTHON_USEDEP}]
 		dev-python/gssapi[${PYTHON_USEDEP}]
