@@ -33,14 +33,16 @@ BDEPEND="
 		>=dev-python/starlette-0.46.1[${PYTHON_USEDEP}]
 		>=dev-python/werkzeug-2.3[${PYTHON_USEDEP}]
 		>=dev-python/yarl-1.9[${PYTHON_USEDEP}]
-		>=dev-python/chalice-1.20[${PYTHON_USEDEP}]
 		>=dev-python/litestar-2.0[${PYTHON_USEDEP}]
 	)
 "
 
+# chalice seems dead upstream, avoid it for an easier py3.14 transition
 EPYTEST_IGNORE=(
 	# avoid unpackaged test dependencies
 	tests/request/test_sanic.py
+	# avoid chalice
+	tests/request/test_chalice.py
 )
 EPYTEST_PLUGINS=( pytest-asyncio )
 distutils_enable_tests pytest
