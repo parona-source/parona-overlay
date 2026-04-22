@@ -53,7 +53,6 @@ BDEPEND="
 		dev-python/inline-snapshot[${PYTHON_USEDEP}]
 
 		dev-python/aiohttp[${PYTHON_USEDEP}]
-		dev-python/chalice[${PYTHON_USEDEP}]
 		dev-python/channels[${PYTHON_USEDEP}]
 		dev-python/django[${PYTHON_USEDEP}]
 		dev-python/fastapi[${PYTHON_USEDEP}]
