@@ -15,8 +15,9 @@ SLOT="0"
 
 RESTRICT="bindist mirror strip test"
 
-# updater_bootstrap
+# updater_bootstrap + script
 RDEPEND="
+	gnome-extra/zenity
 	sys-libs/glibc
 	|| (
 		sys-devel/gcc
