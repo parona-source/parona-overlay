@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit meson
+inherit flag-o-matic meson
 
 DESCRIPTION="A Qt-based wrapper for various wayland protocols."
 HOMEPAGE="https://gitlab.com/desktop-frameworks/wayqt"
@@ -36,6 +36,10 @@ PATCHES=(
 )
 
 src_configure() {
+	# ODR violations that appear to stem from generated headers in unclear circumstances.
+	# https://gitlab.com/Parona/parona-overlay/-/work_items/11
+	filter-lto
+
 	local emesonargs=(
 		-Duse_qt_version=qt6
 	)
