@@ -20,7 +20,6 @@ RDEPEND="
 	app-admin/eclean-kernel
 	app-misc/jq
 	app-portage/gentoolkit
-	app-portage/portage-utils
 	app-portage/smart-live-rebuild
 	app-text/ansifilter
 	net-misc/curl
