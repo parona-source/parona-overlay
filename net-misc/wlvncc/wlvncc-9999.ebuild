@@ -27,7 +27,7 @@ SLOT="0"
 
 # automagic: cyrus-sasl, libgcrypt, lzo, gnutls, libjpeg-turbo, libpng, zlib
 RDEPEND="
-	dev-libs/aml
+	>=dev-libs/aml-1
 	dev-libs/cyrus-sasl:2
 	dev-libs/libgcrypt:=
 	dev-libs/lzo:2
