@@ -26,6 +26,12 @@ SRC_URI="
 KEYWORDS="~amd64"
 
 src_unpack() {
+	# workaround check
+	# https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=82961749e651a57b04bab9a930a7e44d66fa9b7b
+	KPATCH_DIR="${WORKDIR}/patches"
+	mkdir -p "${KPATCH_DIR}" || die
+	touch "${KPATCH_DIR}/1000-${OKV}.patch" || die
+
 	UNIPATCH_STRICTORDER=1
 	UNIPATCH_LIST_DEFAULT="${DISTDIR}/patch-${OKV}-xanmod${XANMOD_VERSION}.xz"
 	UNIPATCH_EXCLUDE="${UNIPATCH_EXCLUDE} 1*_linux-${KV_MAJOR}.${KV_MINOR}.*.patch"
