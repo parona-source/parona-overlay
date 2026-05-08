@@ -50,6 +50,7 @@ src_prepare() {
 	local patch
 	eapply "${WORKDIR}"/patch-${PATCH_PV}-xanmod${XANMOD_VERSION}
 	eapply "${WORKDIR}/${PATCHSET}"
+	eapply "${FILESDIR}/0008-rxrpc-Also-unshare-DATA-RESPONSE-packets-when-paged-.patch" # bug #974307
 
 	default
 
