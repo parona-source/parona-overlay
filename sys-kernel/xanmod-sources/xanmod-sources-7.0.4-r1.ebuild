@@ -33,7 +33,7 @@ src_unpack() {
 	touch "${KPATCH_DIR}/1000-${OKV}.patch" || die
 
 	UNIPATCH_STRICTORDER=1
-	UNIPATCH_LIST_DEFAULT="${DISTDIR}/patch-${OKV}-xanmod${XANMOD_VERSION}.xz"
+	UNIPATCH_LIST_DEFAULT="${DISTDIR}/patch-${OKV}-xanmod${XANMOD_VERSION}.xz ${FILESDIR}/0008-rxrpc-Also-unshare-DATA-RESPONSE-packets-when-paged-.patch" # bug# 974307
 	UNIPATCH_EXCLUDE="${UNIPATCH_EXCLUDE} 1*_linux-${KV_MAJOR}.${KV_MINOR}.*.patch"
 
 	kernel-2_src_unpack
