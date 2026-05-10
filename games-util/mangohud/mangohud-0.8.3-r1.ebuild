@@ -61,17 +61,17 @@ REQUIRED_USE="
 "
 
 COMMON_DEPEND="
-	dev-libs/libfmt:=
-	dev-libs/spdlog:=
-	media-libs/glfw
-	media-libs/libglvnd
-	x11-libs/libxkbcommon
-	X? ( x11-libs/libX11 )
-	wayland? ( dev-libs/wayland )
+	dev-libs/libfmt:=[${MULTILIB_USEDEP}]
+	dev-libs/spdlog:=[${MULTILIB_USEDEP}]
+	media-libs/glfw[${MULTILIB_USEDEP}]
+	media-libs/libglvnd[${MULTILIB_USEDEP}]
+	x11-libs/libxkbcommon[${MULTILIB_USEDEP}]
+	X? ( x11-libs/libX11[${MULTILIB_USEDEP}] )
+	wayland? ( dev-libs/wayland[${MULTILIB_USEDEP}] )
 "
 DEPEND="
 	${COMMON_DEPEND}
-	dbus? ( sys-apps/dbus )
+	dbus? ( sys-apps/dbus[${MULTILIB_USEDEP}] )
 "
 RDEPEND="
 	${COMMON_DEPEND}
