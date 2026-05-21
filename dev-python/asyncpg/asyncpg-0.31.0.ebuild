@@ -30,9 +30,11 @@ KEYWORDS="~amd64"
 RDEPEND="
 	dev-db/postgresql
 "
+# pkg-resources: https://github.com/MagicStack/asyncpg/pull/1314
 BDEPEND="
 	<dev-python/cython-4.0.0[${PYTHON_USEDEP}]
 	>=dev-python/cython-3.2.1[${PYTHON_USEDEP}]
+	dev-python/pkg-resources[${PYTHON_USEDEP}]
 	test? (
 		dev-python/distro[${PYTHON_USEDEP}]
 		dev-python/gssapi[${PYTHON_USEDEP}]
