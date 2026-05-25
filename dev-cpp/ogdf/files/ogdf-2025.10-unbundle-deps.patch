@@ -1,0 +1,1022 @@
+From 40cb7ac65a1f5510618cb53de9aa661d33c9abf7 Mon Sep 17 00:00:00 2001
+From: Timothy Finnegan <finnegantimothyd@gmail.com>
+Date: Thu, 11 Sep 2025 13:28:32 -0700
+Subject: [PATCH 01/12] Added CMake options to disable non-library targets, and
+ the to disable the help message
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -5,6 +5,9 @@ project(OGDF-PROJECT LANGUAGES CXX VERSION "2025.10")
+ set(CMAKE_CXX_STANDARD 17)
+ set(CMAKE_DEBUG_POSTFIX "-debug")
+ 
++option(OGDF_LIBRARY_TARGETS_ONLY "Generate only the library targets (COIN and OGDF)" OFF)
++option(OGDF_DISABLE_HELP_MESSAGE "Disable the CMake Configure help message generated for OGDF" OFF)
++
+ set(module_dir "${PROJECT_SOURCE_DIR}/cmake")
+ list(INSERT CMAKE_MODULE_PATH 0 "${module_dir}" )
+ 
+@@ -28,27 +31,32 @@ include(group-files)
+ include(coin)
+ include(ogdf)
+ 
+-include(make-user-target)
+-include(tests)
+-include(examples)
++if(NOT OGDF_LIBRARY_TARGETS_ONLY)
++  include(make-user-target)
++  include(tests)
++  include(examples)
++
++  include(doc)
+ 
+-include(doc)
++  add_custom_target(build-all DEPENDS OGDF tests examples)
++endif()
+ 
+-add_custom_target(build-all DEPENDS OGDF tests examples)
+ 
+ # target documentation
+-message(STATUS "The default target builds OGDF (and dependencies like COIN).")
+-if(DOXYGEN_FOUND AND DOC_INSTALL)
+-  message(STATUS "Because DOC_INSTALL is set, it also generates the OGDF documentation (in-source).")
+-endif()
+-message(STATUS "")
+-message(STATUS "Other important targets:")
+-if(DOXYGEN_FOUND)
+-  if (DOC_INSTALL)
+-    message(STATUS "        OGDF: build OGDF library only")
++if(NOT OGDF_DISABLE_HELP_MESSAGE)
++  message(STATUS "The default target builds OGDF (and dependencies like COIN).")
++  if(DOXYGEN_FOUND AND DOC_INSTALL)
++    message(STATUS "Because DOC_INSTALL is set, it also generates the OGDF documentation (in-source).")
+   endif()
+-  message(STATUS "         doc: build doxygen documentation (in-source)")
+-endif()
+-message(STATUS "       tests: build tests")
+-message(STATUS "    examples: build examples")
+-message(STATUS "   build-all: build OGDF, tests, examples")
++  message(STATUS "")
++  message(STATUS "Other important targets:")
++  if(DOXYGEN_FOUND)
++    if (DOC_INSTALL)
++      message(STATUS "        OGDF: build OGDF library only")
++    endif()
++    message(STATUS "         doc: build doxygen documentation (in-source)")
++  endif()
++  message(STATUS "       tests: build tests")
++  message(STATUS "    examples: build examples")
++  message(STATUS "   build-all: build OGDF, tests, examples")
++endif()
+\ No newline at end of file
+-- 
+2.54.0
+
+
+From 41ff8c258a7aa076313af7c81f5c02f37a9d311d Mon Sep 17 00:00:00 2001
+From: Simon D Fink <finksim@fim.uni-passau.de>
+Date: Tue, 20 Jan 2026 10:31:30 +0100
+Subject: [PATCH 02/12] fix style
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -59,4 +59,4 @@ if(NOT OGDF_DISABLE_HELP_MESSAGE)
+   message(STATUS "       tests: build tests")
+   message(STATUS "    examples: build examples")
+   message(STATUS "   build-all: build OGDF, tests, examples")
+-endif()
+\ No newline at end of file
++endif()
+-- 
+2.54.0
+
+
+From 56104e77adb201fb90d9c98a17cd964588241d6f Mon Sep 17 00:00:00 2001
+From: Simon D Fink <finksim@fim.uni-passau.de>
+Date: Tue, 20 Jan 2026 10:28:37 +0100
+Subject: [PATCH 03/12] add switches for system-provided COIN, pugiXML and
+ backward
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -5,6 +5,7 @@ project(OGDF-PROJECT LANGUAGES CXX VERSION "2025.10")
+ set(CMAKE_CXX_STANDARD 17)
+ set(CMAKE_DEBUG_POSTFIX "-debug")
+ 
++option(OGDF_EXTERNAL_COIN "Do not use the COIN version packaged with the OGDF, but one provided by the system" OFF)
+ option(OGDF_LIBRARY_TARGETS_ONLY "Generate only the library targets (COIN and OGDF)" OFF)
+ option(OGDF_DISABLE_HELP_MESSAGE "Disable the CMake Configure help message generated for OGDF" OFF)
+ 
+@@ -28,7 +29,14 @@ include(GNUInstallDirs)
+ 
+ include(compiler-specifics)
+ include(group-files)
+-include(coin)
++if(OGDF_EXTERNAL_COIN)
++  find_package(COIN REQUIRED)
++  set(COIN_SOLVER "CLP" CACHE STRING "Linear program solver to be used by COIN.")
++  set_property(CACHE COIN_SOLVER PROPERTY STRINGS CLP CPX GRB)
++  set(COIN_SOLVER_IS_EXTERNAL 0)
++else()
++  include(coin)
++endif()
+ include(ogdf)
+ 
+ if(NOT OGDF_LIBRARY_TARGETS_ONLY)
+--- /dev/null
++++ b/cmake/FindCOIN.cmake
+@@ -0,0 +1,119 @@
++SET(COIN_ROOT_DIR "" CACHE PATH "COIN root directory")
++
++FIND_PATH(COIN_INCLUDE_DIR coin/CoinUtilsConfig.h
++  HINTS ${COIN_ROOT_DIR}/include
++)
++FIND_LIBRARY(COIN_CBC_LIBRARY
++  NAMES Cbc libCbc
++  HINTS ${COIN_ROOT_DIR}/lib/coin
++  HINTS ${COIN_ROOT_DIR}/lib
++)
++FIND_LIBRARY(COIN_CBC_SOLVER_LIBRARY
++  NAMES CbcSolver libCbcSolver
++  HINTS ${COIN_ROOT_DIR}/lib/coin
++  HINTS ${COIN_ROOT_DIR}/lib
++)
++FIND_LIBRARY(COIN_CGL_LIBRARY
++  NAMES Cgl libCgl
++  HINTS ${COIN_ROOT_DIR}/lib/coin
++  HINTS ${COIN_ROOT_DIR}/lib
++)
++FIND_LIBRARY(COIN_CLP_LIBRARY
++  NAMES Clp libClp
++  HINTS ${COIN_ROOT_DIR}/lib/coin
++  HINTS ${COIN_ROOT_DIR}/lib
++)
++FIND_LIBRARY(COIN_COIN_UTILS_LIBRARY
++  NAMES CoinUtils libCoinUtils
++  HINTS ${COIN_ROOT_DIR}/lib/coin
++  HINTS ${COIN_ROOT_DIR}/lib
++)
++FIND_LIBRARY(COIN_OSI_LIBRARY
++  NAMES Osi libOsi
++  HINTS ${COIN_ROOT_DIR}/lib/coin
++  HINTS ${COIN_ROOT_DIR}/lib
++)
++FIND_LIBRARY(COIN_OSI_CBC_LIBRARY
++  NAMES OsiCbc libOsiCbc
++  HINTS ${COIN_ROOT_DIR}/lib/coin
++  HINTS ${COIN_ROOT_DIR}/lib
++)
++FIND_LIBRARY(COIN_OSI_CLP_LIBRARY
++  NAMES OsiClp libOsiClp
++  HINTS ${COIN_ROOT_DIR}/lib/coin
++  HINTS ${COIN_ROOT_DIR}/lib
++)
++FIND_LIBRARY(COIN_OSI_VOL_LIBRARY
++  NAMES OsiVol libOsiVol
++  HINTS ${COIN_ROOT_DIR}/lib/coin
++  HINTS ${COIN_ROOT_DIR}/lib
++)
++FIND_LIBRARY(COIN_VOL_LIBRARY
++  NAMES Vol libVol
++  HINTS ${COIN_ROOT_DIR}/lib/coin
++  HINTS ${COIN_ROOT_DIR}/lib
++)
++
++FIND_LIBRARY(COIN_ZLIB_LIBRARY
++  NAMES z libz
++  HINTS ${COIN_ROOT_DIR}/lib/coin
++  HINTS ${COIN_ROOT_DIR}/lib
++)
++FIND_LIBRARY(COIN_BZ2_LIBRARY
++  NAMES bz2 libbz2
++  HINTS ${COIN_ROOT_DIR}/lib/coin
++  HINTS ${COIN_ROOT_DIR}/lib
++)
++
++FIND_LIBRARY(COIN_PTHREADS_LIBRARY
++  NAMES pthreads libpthreads
++  HINTS ${COIN_ROOT_DIR}/lib/coin
++  HINTS ${COIN_ROOT_DIR}/lib
++)
++
++INCLUDE(FindPackageHandleStandardArgs)
++FIND_PACKAGE_HANDLE_STANDARD_ARGS(COIN DEFAULT_MSG
++  COIN_INCLUDE_DIR
++  COIN_CBC_LIBRARY
++  COIN_CBC_SOLVER_LIBRARY
++  COIN_CGL_LIBRARY
++  COIN_CLP_LIBRARY
++  COIN_COIN_UTILS_LIBRARY
++  COIN_OSI_LIBRARY
++  COIN_OSI_CBC_LIBRARY
++  COIN_OSI_CLP_LIBRARY
++  # COIN_OSI_VOL_LIBRARY
++  # COIN_VOL_LIBRARY
++)
++
++IF(COIN_FOUND)
++  SET(COIN_INCLUDE_DIRS ${COIN_INCLUDE_DIR})
++  SET(COIN_CLP_LIBRARIES "${COIN_CLP_LIBRARY};${COIN_COIN_UTILS_LIBRARY}")
++  IF(COIN_ZLIB_LIBRARY)
++    SET(COIN_CLP_LIBRARIES "${COIN_CLP_LIBRARIES};${COIN_ZLIB_LIBRARY}")
++  ENDIF(COIN_ZLIB_LIBRARY)
++   IF(COIN_BZ2_LIBRARY)
++    SET(COIN_CLP_LIBRARIES "${COIN_CLP_LIBRARIES};${COIN_BZ2_LIBRARY}")
++  ENDIF(COIN_BZ2_LIBRARY)
++   IF(COIN_PTHREADS_LIBRARY)
++    SET(COIN_CLP_LIBRARIES "${COIN_CLP_LIBRARIES};${COIN_PTHREADS_LIBRARY}")
++  ENDIF(COIN_PTHREADS_LIBRARY)
++  SET(COIN_CBC_LIBRARIES "${COIN_CBC_LIBRARY};${COIN_CBC_SOLVER_LIBRARY};${COIN_CGL_LIBRARY};${COIN_OSI_LIBRARY};${COIN_OSI_CBC_LIBRARY};${COIN_OSI_CLP_LIBRARY};${COIN_CLP_LIBRARIES}")
++  SET(COIN_LIBRARIES ${COIN_CBC_LIBRARIES})
++ENDIF(COIN_FOUND)
++
++MARK_AS_ADVANCED(
++  COIN_INCLUDE_DIR
++  COIN_CBC_LIBRARY
++  COIN_CBC_SOLVER_LIBRARY
++  COIN_CGL_LIBRARY
++  COIN_CLP_LIBRARY
++  COIN_COIN_UTILS_LIBRARY
++  COIN_OSI_LIBRARY
++  COIN_OSI_CBC_LIBRARY
++  COIN_OSI_CLP_LIBRARY
++  COIN_OSI_VOL_LIBRARY
++  COIN_VOL_LIBRARY
++  COIN_ZLIB_LIBRARY
++  COIN_BZ2_LIBRARY
++)
+--- /dev/null
++++ b/cmake/FindPugiXML.cmake
+@@ -0,0 +1,31 @@
++# Find the pugixml XML parsing library.
++#
++# Sets the usual variables expected for find_package scripts:
++#
++# PUGIXML_INCLUDE_DIR - header location
++# PUGIXML_LIBRARIES - library to link against
++# PUGIXML_FOUND - true if pugixml was found.
++
++find_path (PUGIXML_INCLUDE_DIR
++           NAMES pugixml.hpp
++           PATHS ${PUGIXML_HOME}/include)
++find_library (PUGIXML_LIBRARY
++              NAMES pugixml
++              PATHS ${PUGIXML_HOME}/lib)
++
++# Support the REQUIRED and QUIET arguments, and set PUGIXML_FOUND if found.
++include (FindPackageHandleStandardArgs)
++FIND_PACKAGE_HANDLE_STANDARD_ARGS (pugixml DEFAULT_MSG PUGIXML_LIBRARY
++                                   PUGIXML_INCLUDE_DIR)
++
++if (PUGIXML_FOUND)
++    set (PUGIXML_LIBRARIES ${PUGIXML_LIBRARY})
++    if (NOT pugixml_FIND_QUIETLY)
++        message (STATUS "PugiXML include = ${PUGIXML_INCLUDE_DIR}")
++        message (STATUS "PugiXML library = ${PUGIXML_LIBRARY}")
++    endif ()
++else ()
++    message (STATUS "No PugiXML found")
++endif()
++
++mark_as_advanced (PUGIXML_LIBRARY PUGIXML_INCLUDE_DIR)
+--- a/cmake/config_autogen.h.in
++++ b/cmake/config_autogen.h.in
+@@ -32,3 +32,6 @@
+ #cmakedefine OGDF_HAS_LINUX_CPU_MACROS
+ #cmakedefine OGDF_HAS_MALLINFO2
+ #cmakedefine OGDF_INCLUDE_CGAL
++#cmakedefine OGDF_EXTERNAL_COIN
++#cmakedefine OGDF_EXTERNAL_PUGIXML
++#cmakedefine OGDF_EXTERNAL_BACKWARD
+--- a/cmake/ogdf.cmake
++++ b/cmake/ogdf.cmake
+@@ -7,11 +7,14 @@ set_property(CACHE OGDF_MEMORY_MANAGER PROPERTY STRINGS POOL_TS POOL_NTS MALLOC_
+ set(OGDF_DEBUG_MODE "REGULAR" CACHE STRING "Whether to use (heavy) OGDF assertions in debug mode.")
+ set_property(CACHE OGDF_DEBUG_MODE PROPERTY STRINGS NONE REGULAR HEAVY)
+ mark_as_advanced(OGDF_DEBUG_MODE)
++option(OGDF_EXTERNAL_PUGIXML "Do not use the pugixml version packaged with the OGDF, but one provided by the system" OFF)
++option(OGDF_EXTERNAL_BACKWARD "Do not use the backward version packaged with the OGDF, but one provided by the system" OFF)
++option(OGDF_INCLUDE_CGAL "Indicates whether components that require CGAL ({src,include}/ogdf/geometric) should be built. Requires OpenMP" OFF)
+ option(OGDF_USE_ASSERT_EXCEPTIONS "Whether to throw an exception on failed assertions." OFF)
+ set(OGDF_USE_ASSERT_EXCEPTIONS_WITH_STACK_TRACE "OFF" CACHE
+     STRING "Which library (libdw, libbdf, libunwind) to use in case a stack trace should be written \
+     to a failed assertion exceptions's what(). Library must be found by CMake to be able to use it.")
+-if(OGDF_USE_ASSERT_EXCEPTIONS)
++if(OGDF_USE_ASSERT_EXCEPTIONS AND NOT OGDF_EXTERNAL_BACKWARD)
+   set_property(CACHE OGDF_USE_ASSERT_EXCEPTIONS_WITH_STACK_TRACE PROPERTY STRINGS "OFF")
+ else()
+   unset(OGDF_USE_ASSERT_EXCEPTIONS_WITH_STACK_TRACE CACHE)
+@@ -56,9 +59,19 @@ if(OGDF_DEBUG_MODE STREQUAL HEAVY)
+ endif()
+ set_debug_mode()
+ 
++# link external pugixml if configured
++if(OGDF_EXTERNAL_PUGIXML)
++  find_package(pugixml)
++  target_link_libraries(OGDF PUBLIC pugixml pugixml::pugixml)
++  target_include_directories(OGDF SYSTEM PUBLIC ${PUGIXML_INCLUDE_DIRECTORIES})
++endif()
+ 
+ # find available packages for stack traces
+-if(OGDF_USE_ASSERT_EXCEPTIONS)
++if(OGDF_EXTERNAL_BACKWARD)
++  find_package(Backward)
++  target_link_libraries(OGDF PUBLIC Backward::Backward)
++  target_include_directories(OGDF SYSTEM PUBLIC ${BACKWARD_INCLUDE_DIRS})
++elseif(OGDF_USE_ASSERT_EXCEPTIONS)
+   find_package(Libdw)
+   if(LIBDW_FOUND)
+     set_property(CACHE OGDF_USE_ASSERT_EXCEPTIONS_WITH_STACK_TRACE APPEND PROPERTY STRINGS "ON_LIBDW")
+@@ -74,7 +87,6 @@ if(OGDF_USE_ASSERT_EXCEPTIONS)
+ endif()
+ 
+ # find CGAL if enabled
+-option(OGDF_INCLUDE_CGAL "Indicates whether components that require CGAL ({src,include}/ogdf/geometric) should be built. Requires OpenMP" OFF)
+ if (OGDF_INCLUDE_CGAL)
+   find_package(CGAL REQUIRED COMPONENTS Core)
+   find_package(OpenMP REQUIRED)
+@@ -96,9 +108,17 @@ endif()
+ # compilation
+ file(GLOB_RECURSE ogdf_headers include/ogdf/*.h)
+ file(GLOB_RECURSE ogdf_sources src/ogdf/*.cpp)
++if(OGDF_EXTERNAL_PUGIXML)
++  list(REMOVE_ITEM ogdf_sources "${PROJECT_SOURCE_DIR}/src/ogdf/lib/pugixml/pugixml.cpp")
++endif()
+ add_library(OGDF "${ogdf_sources}")
+ set_property(TARGET OGDF PROPERTY VERSION ${PROJECT_VERSION})
+-target_link_libraries(OGDF PUBLIC COIN)
++if(OGDF_EXTERNAL_COIN)
++  target_link_libraries(OGDF PUBLIC ${COIN_LIBRARIES})
++  target_include_directories(OGDF SYSTEM PUBLIC ${COIN_INCLUDE_DIR})
++else()
++  target_link_libraries(OGDF PUBLIC COIN)
++endif()
+ group_files(ogdf_sources "ogdf")
+ group_files(ogdf_headers "ogdf")
+ target_compile_features(OGDF PUBLIC cxx_std_${CMAKE_CXX_STANDARD})
+@@ -137,10 +157,12 @@ function (add_ogdf_extra_flags TARGET_NAME)
+     string(REPLACE ";" " " leak_flags "${leak_flag_list}")
+     set(extra_flags "${extra_flags} ${leak_flags}")
+     set_property(TARGET ${TARGET_NAME} APPEND_STRING PROPERTY LINK_FLAGS " ${leak_flags} ")
+-    # If OGDF is compiled with ASAN, compile COIN with ASAN as well.
+-    # This avoids container-overflow false positives.
+-    target_compile_options(COIN PRIVATE ${leak_flag_list})
+-    target_link_options(COIN PRIVATE ${leak_flag_list})
++    if(NOT OGDF_EXTERNAL_COIN)
++      # If OGDF is compiled with ASAN, compile COIN with ASAN as well.
++      # This avoids container-overflow false positives.
++      target_compile_options(COIN PRIVATE ${leak_flag_list})
++      target_link_options(COIN PRIVATE ${leak_flag_list})
++    endif()
+   endif()
+   set_property(TARGET ${TARGET_NAME} APPEND_STRING PROPERTY COMPILE_FLAGS " ${extra_flags} ")
+ endfunction()
+@@ -280,7 +302,9 @@ if(MULTICONFIG_BUILD)
+ endif()
+ set(CPACK_OUTPUT_FILE_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/packages")
+ include(CPack)
+-cpack_add_component(COIN)
+-cpack_add_component(COINheaders)
++if(NOT OGDF_EXTERNAL_COIN)
++  cpack_add_component(COIN)
++  cpack_add_component(COINheaders)
++endif()
+ cpack_add_component(OGDF)
+ cpack_add_component(OGDFheaders)
+--- a/include/ogdf/lib/backward/backward.hpp
++++ b/include/ogdf/lib/backward/backward.hpp
+@@ -21,7 +21,9 @@
+  * SOFTWARE.
+  */
+ 
+-#ifndef H_6B9572DA_A64B_49E6_B234_051480991C89
++#ifdef OGDF_EXTERNAL_BACKWARD
++#include <backward.hpp>
++#elif !defined(H_6B9572DA_A64B_49E6_B234_051480991C89)
+ #define H_6B9572DA_A64B_49E6_B234_051480991C89
+ 
+ #ifndef __cplusplus
+--- a/include/ogdf/lib/pugixml/pugiconfig.h
++++ b/include/ogdf/lib/pugixml/pugiconfig.h
+@@ -15,7 +15,9 @@
+ 
+ #include <ogdf/basic/internal/config.h>
+ 
+-#define PUGIXML_API OGDF_EXPORT
++#ifdef OGDF_EXTERNAL_PUGIXML
++#	error "Included internal PugiXML header while building with OGDF_EXTERNAL_PUGIXML"
++#endif
+ 
+ // Uncomment this to enable wchar_t mode
+ // #define PUGIXML_WCHAR_MODE
+--- a/include/ogdf/lib/pugixml/pugixml.h
++++ b/include/ogdf/lib/pugixml/pugixml.h
+@@ -11,8 +11,13 @@
+  * Copyright (C) 2003, by Kristen Wegner (kristen@tima.net)
+  */
+ 
+-#pragma once
++#ifdef OGDF_EXTERNAL_PUGIXML
++#include <pugixml.hpp>
++#elif !defined(HEADER_PUGIXML_HPP)
++#define HEADER_PUGIXML_HPP
+ 
++// Define version macro; evaluates to major * 1000 + minor * 10 + patch so that it's safe to use in less-than comparisons
++// Note: pugixml used major * 100 + minor * 10 + patch format up until 1.9 (which had version identifier 190); starting from pugixml 1.10, the minor version number is two digits
+ #ifndef PUGIXML_VERSION
+ // Define version macro; evaluates to major * 100 + minor so that it's safe to use in less-than comparisons
+ #	define PUGIXML_VERSION 170
+@@ -1369,6 +1374,8 @@ namespace std
+ }
+ #endif
+ 
++#endif
++
+ // Make sure implementation is included in header-only mode
+ // Use macro expansion in #include to work around QMake (QTBUG-11923)
+ #if defined(PUGIXML_HEADER_ONLY) && !defined(PUGIXML_SOURCE)
+-- 
+2.54.0
+
+
+From 166d77f04c4f5ccd813152450056c99225c06af9 Mon Sep 17 00:00:00 2001
+From: Simon D Fink <finksim@fim.uni-passau.de>
+Date: Tue, 27 Jan 2026 10:40:08 +0100
+Subject: [PATCH 04/12] ensure OGDF_EXTERNAL_* defines are available when
+ including dependency headers
+
+--- a/include/ogdf/lib/backward/backward.hpp
++++ b/include/ogdf/lib/backward/backward.hpp
+@@ -21,6 +21,8 @@
+  * SOFTWARE.
+  */
+ 
++#include <ogdf/basic/internal/config.h> // IWYU pragma: keep
++
+ #ifdef OGDF_EXTERNAL_BACKWARD
+ #include <backward.hpp>
+ #elif !defined(H_6B9572DA_A64B_49E6_B234_051480991C89)
+--- a/include/ogdf/lib/pugixml/pugiconfig.h
++++ b/include/ogdf/lib/pugixml/pugiconfig.h
+@@ -13,7 +13,7 @@
+ 
+ #pragma once
+ 
+-#include <ogdf/basic/internal/config.h>
++#include <ogdf/basic/internal/config.h> // IWYU pragma: keep
+ 
+ #ifdef OGDF_EXTERNAL_PUGIXML
+ #	error "Included internal PugiXML header while building with OGDF_EXTERNAL_PUGIXML"
+--- a/include/ogdf/lib/pugixml/pugixml.h
++++ b/include/ogdf/lib/pugixml/pugixml.h
+@@ -11,6 +11,8 @@
+  * Copyright (C) 2003, by Kristen Wegner (kristen@tima.net)
+  */
+ 
++#include <ogdf/basic/internal/config.h> // IWYU pragma: keep
++
+ #ifdef OGDF_EXTERNAL_PUGIXML
+ #include <pugixml.hpp>
+ #elif !defined(HEADER_PUGIXML_HPP)
+-- 
+2.54.0
+
+
+From cc91ca07051f5e8a3aa9c6ac7e2034b3c592cfaf Mon Sep 17 00:00:00 2001
+From: Simon D Fink <finksim@fim.uni-passau.de>
+Date: Tue, 27 Jan 2026 10:40:59 +0100
+Subject: [PATCH 05/12] improve cmake targets message
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -52,7 +52,11 @@ endif()
+ 
+ # target documentation
+ if(NOT OGDF_DISABLE_HELP_MESSAGE)
+-  message(STATUS "The default target builds OGDF (and dependencies like COIN).")
++  if(OGDF_EXTERNAL_COIN)
++    message(STATUS "The default target builds OGDF.")
++  else()
++    message(STATUS "The default target builds OGDF (and dependencies like COIN).")
++  endif()
+   if(DOXYGEN_FOUND AND DOC_INSTALL)
+     message(STATUS "Because DOC_INSTALL is set, it also generates the OGDF documentation (in-source).")
+   endif()
+-- 
+2.54.0
+
+
+From ae582543ad6d73993edc6fd6b57867907d864ce6 Mon Sep 17 00:00:00 2001
+From: Simon D Fink <finksim@fim.uni-passau.de>
+Date: Tue, 27 Jan 2026 15:03:46 +0100
+Subject: [PATCH 06/12] iwyu
+
+--- a/include/ogdf/fileformats/GraphMLParser.h
++++ b/include/ogdf/fileformats/GraphMLParser.h
+@@ -32,7 +32,6 @@
+ #pragma once
+ 
+ #include <ogdf/basic/Graph.h>
+-#include <ogdf/basic/basic.h>
+ #include <ogdf/cluster/ClusterGraph.h>
+ 
+ #include <ogdf/lib/pugixml/pugixml.h>
+--- a/src/ogdf/fileformats/GraphIO_gexf.cpp
++++ b/src/ogdf/fileformats/GraphIO_gexf.cpp
+@@ -35,7 +35,6 @@
+ #include <ogdf/basic/LayoutStandards.h>
+ #include <ogdf/basic/List.h>
+ #include <ogdf/basic/Logger.h>
+-#include <ogdf/basic/basic.h>
+ #include <ogdf/basic/geometry.h>
+ #include <ogdf/basic/graphics.h>
+ #include <ogdf/cluster/ClusterGraph.h>
+--- a/src/ogdf/fileformats/GraphIO_graphml.cpp
++++ b/src/ogdf/fileformats/GraphIO_graphml.cpp
+@@ -33,7 +33,6 @@
+ #include <ogdf/basic/GraphAttributes.h>
+ #include <ogdf/basic/GraphList.h>
+ #include <ogdf/basic/List.h>
+-#include <ogdf/basic/basic.h>
+ #include <ogdf/basic/geometry.h>
+ #include <ogdf/basic/graphics.h>
+ #include <ogdf/cluster/ClusterGraph.h>
+--- a/src/ogdf/fileformats/GraphMLParser.cpp
++++ b/src/ogdf/fileformats/GraphMLParser.cpp
+@@ -32,7 +32,6 @@
+ #include <ogdf/basic/Graph.h>
+ #include <ogdf/basic/GraphAttributes.h>
+ #include <ogdf/basic/Logger.h>
+-#include <ogdf/basic/basic.h>
+ #include <ogdf/basic/geometry.h>
+ #include <ogdf/basic/graphics.h>
+ #include <ogdf/cluster/ClusterGraph.h>
+-- 
+2.54.0
+
+
+From 5485e1fe27bc16d3d7e3778c70a005af12f355dd Mon Sep 17 00:00:00 2001
+From: Simon D Fink <finksim@fim.uni-passau.de>
+Date: Thu, 12 Feb 2026 11:13:04 +0100
+Subject: [PATCH 07/12] remove FindCOIN (replaced by pkg-config lookup) and
+ FindPugiXML (provided by pugi itself)
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -30,7 +30,12 @@ include(GNUInstallDirs)
+ include(compiler-specifics)
+ include(group-files)
+ if(OGDF_EXTERNAL_COIN)
+-  find_package(COIN REQUIRED)
++  # standard COIN has no CMake config/find files, so we search it via pkg-config
++  # osi-clp pulls in clp, osi and coinutils automatically, which are all the parts of COIN we vendor
++  find_package(PkgConfig)
++  pkg_check_modules(OsiClp REQUIRED IMPORTED_TARGET GLOBAL osi-clp)
++  add_library(COIN ALIAS PkgConfig::OsiClp)
++
+   set(COIN_SOLVER "CLP" CACHE STRING "Linear program solver to be used by COIN.")
+   set_property(CACHE COIN_SOLVER PROPERTY STRINGS CLP CPX GRB)
+   set(COIN_SOLVER_IS_EXTERNAL 0)
+--- a/cmake/FindCOIN.cmake
++++ /dev/null
+@@ -1,119 +0,0 @@
+-SET(COIN_ROOT_DIR "" CACHE PATH "COIN root directory")
+-
+-FIND_PATH(COIN_INCLUDE_DIR coin/CoinUtilsConfig.h
+-  HINTS ${COIN_ROOT_DIR}/include
+-)
+-FIND_LIBRARY(COIN_CBC_LIBRARY
+-  NAMES Cbc libCbc
+-  HINTS ${COIN_ROOT_DIR}/lib/coin
+-  HINTS ${COIN_ROOT_DIR}/lib
+-)
+-FIND_LIBRARY(COIN_CBC_SOLVER_LIBRARY
+-  NAMES CbcSolver libCbcSolver
+-  HINTS ${COIN_ROOT_DIR}/lib/coin
+-  HINTS ${COIN_ROOT_DIR}/lib
+-)
+-FIND_LIBRARY(COIN_CGL_LIBRARY
+-  NAMES Cgl libCgl
+-  HINTS ${COIN_ROOT_DIR}/lib/coin
+-  HINTS ${COIN_ROOT_DIR}/lib
+-)
+-FIND_LIBRARY(COIN_CLP_LIBRARY
+-  NAMES Clp libClp
+-  HINTS ${COIN_ROOT_DIR}/lib/coin
+-  HINTS ${COIN_ROOT_DIR}/lib
+-)
+-FIND_LIBRARY(COIN_COIN_UTILS_LIBRARY
+-  NAMES CoinUtils libCoinUtils
+-  HINTS ${COIN_ROOT_DIR}/lib/coin
+-  HINTS ${COIN_ROOT_DIR}/lib
+-)
+-FIND_LIBRARY(COIN_OSI_LIBRARY
+-  NAMES Osi libOsi
+-  HINTS ${COIN_ROOT_DIR}/lib/coin
+-  HINTS ${COIN_ROOT_DIR}/lib
+-)
+-FIND_LIBRARY(COIN_OSI_CBC_LIBRARY
+-  NAMES OsiCbc libOsiCbc
+-  HINTS ${COIN_ROOT_DIR}/lib/coin
+-  HINTS ${COIN_ROOT_DIR}/lib
+-)
+-FIND_LIBRARY(COIN_OSI_CLP_LIBRARY
+-  NAMES OsiClp libOsiClp
+-  HINTS ${COIN_ROOT_DIR}/lib/coin
+-  HINTS ${COIN_ROOT_DIR}/lib
+-)
+-FIND_LIBRARY(COIN_OSI_VOL_LIBRARY
+-  NAMES OsiVol libOsiVol
+-  HINTS ${COIN_ROOT_DIR}/lib/coin
+-  HINTS ${COIN_ROOT_DIR}/lib
+-)
+-FIND_LIBRARY(COIN_VOL_LIBRARY
+-  NAMES Vol libVol
+-  HINTS ${COIN_ROOT_DIR}/lib/coin
+-  HINTS ${COIN_ROOT_DIR}/lib
+-)
+-
+-FIND_LIBRARY(COIN_ZLIB_LIBRARY
+-  NAMES z libz
+-  HINTS ${COIN_ROOT_DIR}/lib/coin
+-  HINTS ${COIN_ROOT_DIR}/lib
+-)
+-FIND_LIBRARY(COIN_BZ2_LIBRARY
+-  NAMES bz2 libbz2
+-  HINTS ${COIN_ROOT_DIR}/lib/coin
+-  HINTS ${COIN_ROOT_DIR}/lib
+-)
+-
+-FIND_LIBRARY(COIN_PTHREADS_LIBRARY
+-  NAMES pthreads libpthreads
+-  HINTS ${COIN_ROOT_DIR}/lib/coin
+-  HINTS ${COIN_ROOT_DIR}/lib
+-)
+-
+-INCLUDE(FindPackageHandleStandardArgs)
+-FIND_PACKAGE_HANDLE_STANDARD_ARGS(COIN DEFAULT_MSG
+-  COIN_INCLUDE_DIR
+-  COIN_CBC_LIBRARY
+-  COIN_CBC_SOLVER_LIBRARY
+-  COIN_CGL_LIBRARY
+-  COIN_CLP_LIBRARY
+-  COIN_COIN_UTILS_LIBRARY
+-  COIN_OSI_LIBRARY
+-  COIN_OSI_CBC_LIBRARY
+-  COIN_OSI_CLP_LIBRARY
+-  # COIN_OSI_VOL_LIBRARY
+-  # COIN_VOL_LIBRARY
+-)
+-
+-IF(COIN_FOUND)
+-  SET(COIN_INCLUDE_DIRS ${COIN_INCLUDE_DIR})
+-  SET(COIN_CLP_LIBRARIES "${COIN_CLP_LIBRARY};${COIN_COIN_UTILS_LIBRARY}")
+-  IF(COIN_ZLIB_LIBRARY)
+-    SET(COIN_CLP_LIBRARIES "${COIN_CLP_LIBRARIES};${COIN_ZLIB_LIBRARY}")
+-  ENDIF(COIN_ZLIB_LIBRARY)
+-   IF(COIN_BZ2_LIBRARY)
+-    SET(COIN_CLP_LIBRARIES "${COIN_CLP_LIBRARIES};${COIN_BZ2_LIBRARY}")
+-  ENDIF(COIN_BZ2_LIBRARY)
+-   IF(COIN_PTHREADS_LIBRARY)
+-    SET(COIN_CLP_LIBRARIES "${COIN_CLP_LIBRARIES};${COIN_PTHREADS_LIBRARY}")
+-  ENDIF(COIN_PTHREADS_LIBRARY)
+-  SET(COIN_CBC_LIBRARIES "${COIN_CBC_LIBRARY};${COIN_CBC_SOLVER_LIBRARY};${COIN_CGL_LIBRARY};${COIN_OSI_LIBRARY};${COIN_OSI_CBC_LIBRARY};${COIN_OSI_CLP_LIBRARY};${COIN_CLP_LIBRARIES}")
+-  SET(COIN_LIBRARIES ${COIN_CBC_LIBRARIES})
+-ENDIF(COIN_FOUND)
+-
+-MARK_AS_ADVANCED(
+-  COIN_INCLUDE_DIR
+-  COIN_CBC_LIBRARY
+-  COIN_CBC_SOLVER_LIBRARY
+-  COIN_CGL_LIBRARY
+-  COIN_CLP_LIBRARY
+-  COIN_COIN_UTILS_LIBRARY
+-  COIN_OSI_LIBRARY
+-  COIN_OSI_CBC_LIBRARY
+-  COIN_OSI_CLP_LIBRARY
+-  COIN_OSI_VOL_LIBRARY
+-  COIN_VOL_LIBRARY
+-  COIN_ZLIB_LIBRARY
+-  COIN_BZ2_LIBRARY
+-)
+--- a/cmake/FindPugiXML.cmake
++++ /dev/null
+@@ -1,31 +0,0 @@
+-# Find the pugixml XML parsing library.
+-#
+-# Sets the usual variables expected for find_package scripts:
+-#
+-# PUGIXML_INCLUDE_DIR - header location
+-# PUGIXML_LIBRARIES - library to link against
+-# PUGIXML_FOUND - true if pugixml was found.
+-
+-find_path (PUGIXML_INCLUDE_DIR
+-           NAMES pugixml.hpp
+-           PATHS ${PUGIXML_HOME}/include)
+-find_library (PUGIXML_LIBRARY
+-              NAMES pugixml
+-              PATHS ${PUGIXML_HOME}/lib)
+-
+-# Support the REQUIRED and QUIET arguments, and set PUGIXML_FOUND if found.
+-include (FindPackageHandleStandardArgs)
+-FIND_PACKAGE_HANDLE_STANDARD_ARGS (pugixml DEFAULT_MSG PUGIXML_LIBRARY
+-                                   PUGIXML_INCLUDE_DIR)
+-
+-if (PUGIXML_FOUND)
+-    set (PUGIXML_LIBRARIES ${PUGIXML_LIBRARY})
+-    if (NOT pugixml_FIND_QUIETLY)
+-        message (STATUS "PugiXML include = ${PUGIXML_INCLUDE_DIR}")
+-        message (STATUS "PugiXML library = ${PUGIXML_LIBRARY}")
+-    endif ()
+-else ()
+-    message (STATUS "No PugiXML found")
+-endif()
+-
+-mark_as_advanced (PUGIXML_LIBRARY PUGIXML_INCLUDE_DIR)
+-- 
+2.54.0
+
+
+From b9d8cf6d9c5ed6ed4bfabad49579b440750f6a6b Mon Sep 17 00:00:00 2001
+From: Simon D Fink <finksim@fim.uni-passau.de>
+Date: Thu, 12 Feb 2026 11:14:21 +0100
+Subject: [PATCH 08/12] provide same config options for external COIN as
+ vendored one
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -36,9 +36,14 @@ if(OGDF_EXTERNAL_COIN)
+   pkg_check_modules(OsiClp REQUIRED IMPORTED_TARGET GLOBAL osi-clp)
+   add_library(COIN ALIAS PkgConfig::OsiClp)
+ 
++  # these are same options as our vendored coin.cmake provides, ogdf::CoinManager uses them in createCorrectOsiSolverInterface
+   set(COIN_SOLVER "CLP" CACHE STRING "Linear program solver to be used by COIN.")
+   set_property(CACHE COIN_SOLVER PROPERTY STRINGS CLP CPX GRB)
+-  set(COIN_SOLVER_IS_EXTERNAL 0)
++  if(COIN_SOLVER STREQUAL "CLP")
++    set(COIN_SOLVER_IS_EXTERNAL 0)
++  else()
++    set(COIN_SOLVER_IS_EXTERNAL 1)
++  endif()
+ else()
+   include(coin)
+ endif()
+-- 
+2.54.0
+
+
+From c78fa9aa9fb19e44d72104d5394bc116eb15c38b Mon Sep 17 00:00:00 2001
+From: Simon D Fink <finksim@fim.uni-passau.de>
+Date: Thu, 12 Feb 2026 11:19:41 +0100
+Subject: [PATCH 09/12] move external pugixml and backward cmake config to
+ correct location
+
+--- a/cmake/ogdf.cmake
++++ b/cmake/ogdf.cmake
+@@ -59,34 +59,7 @@ if(OGDF_DEBUG_MODE STREQUAL HEAVY)
+ endif()
+ set_debug_mode()
+ 
+-# link external pugixml if configured
+-if(OGDF_EXTERNAL_PUGIXML)
+-  find_package(pugixml)
+-  target_link_libraries(OGDF PUBLIC pugixml pugixml::pugixml)
+-  target_include_directories(OGDF SYSTEM PUBLIC ${PUGIXML_INCLUDE_DIRECTORIES})
+-endif()
+-
+-# find available packages for stack traces
+-if(OGDF_EXTERNAL_BACKWARD)
+-  find_package(Backward)
+-  target_link_libraries(OGDF PUBLIC Backward::Backward)
+-  target_include_directories(OGDF SYSTEM PUBLIC ${BACKWARD_INCLUDE_DIRS})
+-elseif(OGDF_USE_ASSERT_EXCEPTIONS)
+-  find_package(Libdw)
+-  if(LIBDW_FOUND)
+-    set_property(CACHE OGDF_USE_ASSERT_EXCEPTIONS_WITH_STACK_TRACE APPEND PROPERTY STRINGS "ON_LIBDW")
+-  endif()
+-  find_package(Libbfd)
+-  if(LIBBFD_FOUND)
+-    set_property(CACHE OGDF_USE_ASSERT_EXCEPTIONS_WITH_STACK_TRACE APPEND PROPERTY STRINGS "ON_LIBBFD")
+-  endif()
+-  find_package(Libunwind)
+-  if(LIBUNWIND_FOUND)
+-    set_property(CACHE OGDF_USE_ASSERT_EXCEPTIONS_WITH_STACK_TRACE APPEND PROPERTY STRINGS "ON_LIBUNWIND")
+-  endif()
+-endif()
+-
+-# find CGAL if enabled
++# find CGAL if enabled (target_link_libraries for CGAL is in make_user_target)
+ if (OGDF_INCLUDE_CGAL)
+   find_package(CGAL REQUIRED COMPONENTS Core)
+   find_package(OpenMP REQUIRED)
+@@ -185,6 +158,33 @@ if(BUILD_SHARED_LIBS)
+   endif()
+ endif()
+ 
++# link external pugixml if configured
++if(OGDF_EXTERNAL_PUGIXML)
++  find_package(pugixml REQUIRED)
++  target_link_libraries(OGDF PUBLIC pugixml pugixml::pugixml)
++  target_include_directories(OGDF SYSTEM PUBLIC ${PUGIXML_INCLUDE_DIRECTORIES})
++endif()
++
++# find available packages for stack traces
++if(OGDF_EXTERNAL_BACKWARD)
++  find_package(Backward REQUIRED)
++  target_link_libraries(OGDF PUBLIC Backward::Backward)
++  target_include_directories(OGDF SYSTEM PUBLIC ${BACKWARD_INCLUDE_DIRS})
++elseif(OGDF_USE_ASSERT_EXCEPTIONS)
++  find_package(Libdw)
++  if(LIBDW_FOUND)
++    set_property(CACHE OGDF_USE_ASSERT_EXCEPTIONS_WITH_STACK_TRACE APPEND PROPERTY STRINGS "ON_LIBDW")
++  endif()
++  find_package(Libbfd)
++  if(LIBBFD_FOUND)
++    set_property(CACHE OGDF_USE_ASSERT_EXCEPTIONS_WITH_STACK_TRACE APPEND PROPERTY STRINGS "ON_LIBBFD")
++  endif()
++  find_package(Libunwind)
++  if(LIBUNWIND_FOUND)
++    set_property(CACHE OGDF_USE_ASSERT_EXCEPTIONS_WITH_STACK_TRACE APPEND PROPERTY STRINGS "ON_LIBUNWIND")
++  endif()
++endif()
++
+ # autogen header variables for debug mode
+ set(SHOW_STACKTRACE 0)
+ if(OGDF_DEBUG AND OGDF_USE_ASSERT_EXCEPTIONS)
+-- 
+2.54.0
+
+
+From fe46631a41d2d6cbbe721c1f2317980259b33e83 Mon Sep 17 00:00:00 2001
+From: Simon D Fink <finksim@fim.uni-passau.de>
+Date: Thu, 12 Feb 2026 11:20:00 +0100
+Subject: [PATCH 10/12] mark all new cmake options as advanced
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -8,6 +8,7 @@ set(CMAKE_DEBUG_POSTFIX "-debug")
+ option(OGDF_EXTERNAL_COIN "Do not use the COIN version packaged with the OGDF, but one provided by the system" OFF)
+ option(OGDF_LIBRARY_TARGETS_ONLY "Generate only the library targets (COIN and OGDF)" OFF)
+ option(OGDF_DISABLE_HELP_MESSAGE "Disable the CMake Configure help message generated for OGDF" OFF)
++mark_as_advanced(OGDF_EXTERNAL_COIN OGDF_LIBRARY_TARGETS_ONLY OGDF_DISABLE_HELP_MESSAGE)
+ 
+ set(module_dir "${PROJECT_SOURCE_DIR}/cmake")
+ list(INSERT CMAKE_MODULE_PATH 0 "${module_dir}" )
+--- a/cmake/ogdf.cmake
++++ b/cmake/ogdf.cmake
+@@ -9,6 +9,7 @@ set_property(CACHE OGDF_DEBUG_MODE PROPERTY STRINGS NONE REGULAR HEAVY)
+ mark_as_advanced(OGDF_DEBUG_MODE)
+ option(OGDF_EXTERNAL_PUGIXML "Do not use the pugixml version packaged with the OGDF, but one provided by the system" OFF)
+ option(OGDF_EXTERNAL_BACKWARD "Do not use the backward version packaged with the OGDF, but one provided by the system" OFF)
++mark_as_advanced(OGDF_EXTERNAL_PUGIXML OGDF_EXTERNAL_BACKWARD)
+ option(OGDF_INCLUDE_CGAL "Indicates whether components that require CGAL ({src,include}/ogdf/geometric) should be built. Requires OpenMP" OFF)
+ option(OGDF_USE_ASSERT_EXCEPTIONS "Whether to throw an exception on failed assertions." OFF)
+ set(OGDF_USE_ASSERT_EXCEPTIONS_WITH_STACK_TRACE "OFF" CACHE
+-- 
+2.54.0
+
+
+From c305d4c7d1b9d22fc85c3adb9e487e4ddb29678a Mon Sep 17 00:00:00 2001
+From: Simon D Fink <finksim@fim.uni-passau.de>
+Date: Thu, 12 Feb 2026 11:41:37 +0100
+Subject: [PATCH 11/12] fix cmake linking to COIN
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -31,10 +31,11 @@ include(GNUInstallDirs)
+ include(compiler-specifics)
+ include(group-files)
+ if(OGDF_EXTERNAL_COIN)
+-  # standard COIN has no CMake config/find files, so we search it via pkg-config
+-  # osi-clp pulls in clp, osi and coinutils automatically, which are all the parts of COIN we vendor
++  # Standard COIN has no CMake config/find files, so we search it via its provided pkg-config files.
++  # There, osi-clp pulls in clp, osi, and coinutils automatically (which are all the parts of COIN we vendor),
++  # but we still need to specify them explicitly to make the linker find symbols in the right order.
+   find_package(PkgConfig)
+-  pkg_check_modules(OsiClp REQUIRED IMPORTED_TARGET GLOBAL osi-clp)
++  pkg_check_modules(OsiClp REQUIRED IMPORTED_TARGET GLOBAL osi-clp clp osi coinutils)
+   add_library(COIN ALIAS PkgConfig::OsiClp)
+ 
+   # these are same options as our vendored coin.cmake provides, ogdf::CoinManager uses them in createCorrectOsiSolverInterface
+--- a/cmake/ogdf.cmake
++++ b/cmake/ogdf.cmake
+@@ -87,12 +87,7 @@ if(OGDF_EXTERNAL_PUGIXML)
+ endif()
+ add_library(OGDF "${ogdf_sources}")
+ set_property(TARGET OGDF PROPERTY VERSION ${PROJECT_VERSION})
+-if(OGDF_EXTERNAL_COIN)
+-  target_link_libraries(OGDF PUBLIC ${COIN_LIBRARIES})
+-  target_include_directories(OGDF SYSTEM PUBLIC ${COIN_INCLUDE_DIR})
+-else()
+-  target_link_libraries(OGDF PUBLIC COIN)
+-endif()
++target_link_libraries(OGDF PUBLIC COIN) # from coin.cmake or the external one
+ group_files(ogdf_sources "ogdf")
+ group_files(ogdf_headers "ogdf")
+ target_compile_features(OGDF PUBLIC cxx_std_${CMAKE_CXX_STANDARD})
+-- 
+2.54.0
+
+
+From 39ec98d09edc8572e11dfef08152a8ecce350473 Mon Sep 17 00:00:00 2001
+From: Simon D Fink <finksim@fim.uni-passau.de>
+Date: Sun, 15 Feb 2026 11:27:47 +0100
+Subject: [PATCH 12/12] error out when using vendored COIN includes with
+ OGDF_EXTERNAL_COIN
+
+--- a/include/coin/OsiSolverInterface.hpp
++++ b/include/coin/OsiSolverInterface.hpp
+@@ -2,6 +2,10 @@
+ // Corporation and others.  All Rights Reserved.
+ // This code is licensed under the terms of the Eclipse Public License (EPL).
+ 
++#ifdef OGDF_EXTERNAL_COIN
++#error "OGDF_EXTERNAL_COIN set, but COIN includes vendored with the OGDF source are used! Delete or rename ogdf/include/coin to ensure the correct COIN headers are used."
++#endif
++
+ #ifndef OsiSolverInterface_H
+ #define OsiSolverInterface_H
+ 
+--- a/include/coin/config.h
++++ b/include/coin/config.h
+@@ -1,5 +1,9 @@
+ #include <cstdint>
+ 
++#ifdef OGDF_EXTERNAL_COIN
++#error "OGDF_EXTERNAL_COIN set, but COIN includes vendored with the OGDF source are used! Delete or rename ogdf/include/coin to ensure the correct COIN headers are used."
++#endif
++
+ //----------------------
+ // CLP
+ //
+--- a/include/coin/config_default.h
++++ b/include/coin/config_default.h
+@@ -1,3 +1,6 @@
++#ifdef OGDF_EXTERNAL_COIN
++#error "OGDF_EXTERNAL_COIN set, but COIN includes vendored with the OGDF source are used! Delete or rename ogdf/include/coin to ensure the correct COIN headers are used."
++#endif
+ 
+ /* include the COIN-OR-wide system specific configure header */
+ #include "configall_system.h"
+-- 
+2.54.0
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e53cfb23..15135d47 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -46,6 +46,9 @@ if(OGDF_EXTERNAL_COIN)
+   else()
+     set(COIN_SOLVER_IS_EXTERNAL 1)
+   endif()
++  install(FILES
++      "${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindCOIN.cmake"
++      DESTINATION ${CMAKE_INSTALL_DATADIR}/ogdf)
+ else()
+   include(coin)
+ endif()
+diff --git a/cmake/FindCOIN.cmake b/cmake/FindCOIN.cmake
+new file mode 100644
+index 00000000..b131f082
+--- /dev/null
++++ b/cmake/FindCOIN.cmake
+@@ -0,0 +1,12 @@
++find_package(PkgConfig)
++pkg_check_modules(OsiClp REQUIRED IMPORTED_TARGET GLOBAL osi-clp clp osi coinutils)
++add_library(COIN ALIAS PkgConfig::OsiClp)
++
++set(COIN_SOLVER "CLP" CACHE STRING "Linear program solver to be used by COIN.")
++set_property(CACHE COIN_SOLVER PROPERTY STRINGS CLP CPX GRB)
++
++if(COIN_SOLVER STREQUAL "CLP")
++    set(COIN_SOLVER_IS_EXTERNAL 0)
++else()
++    set(COIN_SOLVER_IS_EXTERNAL 1)
++endif()
+diff --git a/cmake/ogdf-config.cmake.in b/cmake/ogdf-config.cmake.in
+index 8f7899e6..59e7aa95 100644
+--- a/cmake/ogdf-config.cmake.in
++++ b/cmake/ogdf-config.cmake.in
+@@ -11,7 +11,19 @@ elseif("@OGDF_USE_ASSERT_EXCEPTIONS_WITH_STACK_TRACE@" STREQUAL "ON_LIBUNWIND")
+     find_package(Libunwind REQUIRED)
+ endif()
+ 
++if (@OGDF_EXTERNAL_PUGIXML@)
++    find_package(pugixml REQUIRED)
++endif()
++
++if (@OGDF_EXTERNAL_BACKWARD@)
++    find_package(Backward REQUIRED)
++endif()
++
++if(@OGDF_EXTERNAL_COIN@)
++    find_package(COIN REQUIRED)
++else()
+ include("${CMAKE_CURRENT_LIST_DIR}/CoinTargets.cmake")
++endif()
+ include("${CMAKE_CURRENT_LIST_DIR}/OgdfTargets.cmake")
+ 
+ set(OGDF_INCLUDE_DIRS $<TARGET_PROPERTY:OGDF,INTERFACE_INCLUDE_DIRECTORIES>)
+-- 
+2.54.0
+

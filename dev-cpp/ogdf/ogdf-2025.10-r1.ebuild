@@ -26,6 +26,8 @@ IUSE="cgal cpu_flags_x86_sse3 test"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
+	dev-cpp/backward-cpp
+	dev-libs/pugixml
 	sci-libs/coinor-clp:=
 	sci-libs/coinor-utils:=
 	cgal? ( sci-mathematics/cgal:= )
@@ -34,6 +36,10 @@ DEPEND="${RDEPEND}"
 BDEPEND="
 	$(unpacker_src_uri_depends)
 "
+
+PATCHES=(
+	"${FILESDIR}"/ogdf-2025.10-unbundle-deps.patch
+)
 
 pkg_pretend() {
 	[[ ${MERGE_TYPE} != binary ]] && use cgal && tc-check-openmp
@@ -47,7 +53,6 @@ src_prepare() {
 	default
 
 	# unbundle by force
-	cp "${FILESDIR}"/coin.cmake cmake/coin.cmake || die
 	rm -rf src/coin include/coin || die
 
 	cmake_prepare
@@ -66,6 +71,9 @@ src_configure() {
 		-DOGDF_SSE3_EXTENSIONS=$(usex cpu_flags_x86_sse3)
 		-DOGDF_USE_ASSERT_EXCEPTIONS=OFF # todo: efutils+binutils+libunwind
 		-DOGDF_WARNING_ERRORS=OFF
+		-DOGDF_EXTERNAL_COIN=ON
+		-DOGDF_EXTERNAL_PUGIXML=ON
+		-DOGDF_EXTERNAL_BACKWARD=ON
 	)
 	cmake_src_configure
 }
@@ -84,5 +92,4 @@ src_test() {
 		fi
 	done
 	eend ${#failed_tests[@]} || die "Failed tests: ${failed_tests[@]}"
-
 }
