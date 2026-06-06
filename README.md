@@ -92,8 +92,6 @@ Also includes ebuilds that I intend to push to ::gentoo (or not), unkeyworded of
 
 * app-alternatives/unzip and app-arch/unzip
 	- https://github.com/gentoo/gentoo/pull/33998
-* net-im/discord and net-im/discord-ptb
-	- https://github.com/gentoo/gentoo/pull/36592
 * media-sound/spotify
 	- Easier to keep up to date locally and it started diverging...
 * games-util/nexusmodsapp
