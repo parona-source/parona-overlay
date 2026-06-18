@@ -23,6 +23,7 @@ RESTRICT="test" # broken tests
 COMMON_DEPEND="
 	dev-cpp/args
 	dev-cpp/nlohmann_json
+	<gui-libs/ftxui-7
 	>=gui-libs/ftxui-6:=
 "
 DEPEND="
