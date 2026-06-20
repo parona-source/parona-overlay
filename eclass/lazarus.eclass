@@ -56,11 +56,31 @@ fi
 # @DESCRIPTION:
 # User-controlled environment variable containing arguments to be passed to lazbuild.
 
-# @FUNCTION: elazbuild
-# @USAGE: [<args>...]
+# @ECLASS_VARIABLE: LAZARUSARGS
+# @OUTPUT_VARIABLE
 # @DESCRIPTION:
-# Call lazbuild with default arguments in addition to supplied arguments.
-elazbuild() {
+# Arguments to pass to Lazarus. Set by lazarus_src_configure.
+
+# @FUNCTION: lazarus_src_configure
+# @DESCRIPTION:
+# Configure options for fpc and lazarus.
+lazarus_src_configure() {
+	# https://wiki.freepascal.org/Configuration_file
+	export PPC_CONFIG_PATH="${T}/fpc/"
+	mkdir -p "${PPC_CONFIG_PATH}" || die
+	cat > "${PPC_CONFIG_PATH}"/fpc.cfg <<-EOF
+	# Get system wide configuration for the correct searchpaths.
+	#INCLUDE ${EPREFIX}/etc/fpc.cfg
+
+	# Then override options from that system wide configuration
+
+	# Disable stripping. The package manager handles stripping and keeping the debug symbols.
+	-Xs-
+
+	# Enable build-id's
+	-k --build-id
+	EOF
+
 	local _lazarusargs=(
 		--max-process-count=$(get_makeopts_jobs)
 		--verbose
@@ -69,10 +89,20 @@ elazbuild() {
 		${LAZARUS_WIDGET:+--widgetset=${LAZARUS_WIDGET}}
 		${MYLAZARUSARGS}
 	)
+	export LAZARUSARGS="${_lazarusargs[@]}"
+	readonly LAZARUSARGS
+}
 
-	set -- lazbuild ${_lazarusargs[@]} ${@}
+# @FUNCTION: elazbuild
+# @USAGE: [<args>...]
+# @DESCRIPTION:
+# Call lazbuild with default arguments in addition to supplied arguments.
+elazbuild() {
+	set -- lazbuild ${LAZARUSARGS} ${@}
 	einfo "${@}"
 	"${@}" || die
 }
 
 fi
+
+EXPORT_FUNCTIONS src_configure
