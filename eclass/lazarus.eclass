@@ -25,7 +25,7 @@ inherit multiprocessing
 # @PRE_INHERIT
 # @DEFAULT_UNSET
 # @DESCRIPTION:
-# Set the project wiget. Adds the option --widgetset and required dependencies if set.
+# Set the project widget. Adds the option --widgetset and required dependencies if set.
 # Supported values: gtk2 gtk3 qt6
 
 if [[ -n ${LAZARUS_WIDGET} ]]; then
