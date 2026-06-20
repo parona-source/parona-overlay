@@ -51,7 +51,7 @@ if [[ -n ${LAZARUS_WIDGET} ]]; then
 	esac
 fi
 
-# @ECLASS_VARIABLE: MY_LAZARUSBUILDOPTS
+# @ECLASS_VARIABLE: MYLAZARUSARGS
 # @USER_VARIABLE
 # @DESCRIPTION:
 # User-controlled environment variable containing arguments to be passed to lazbuild.
@@ -61,16 +61,16 @@ fi
 # @DESCRIPTION:
 # Call lazbuild with default arguments in addition to supplied arguments.
 elazbuild() {
-	local _lazarusbuildopts=(
+	local _lazarusargs=(
 		--max-process-count=$(get_makeopts_jobs)
 		--verbose
 		--lazarusdir=/usr/share/lazarus/
 		--primary-config-path="${T}"/lazconfig
 		${LAZARUS_WIDGET:+--widgetset=${LAZARUS_WIDGET}}
-		${MY_LAZARUSBUILDOPTS}
+		${MYLAZARUSARGS}
 	)
 
-	set -- lazbuild ${_lazarusbuildopts[@]} ${@}
+	set -- lazbuild ${_lazarusargs[@]} ${@}
 	einfo "${@}"
 	"${@}" || die
 }
