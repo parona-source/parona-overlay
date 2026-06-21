@@ -12,7 +12,7 @@
 # @BLURB: common ebuild function for lazarus-based ebuilds
 
 case ${EAPI} in
-	8) ;;
+	8|9) ;;
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
@@ -20,6 +20,7 @@ if [[ ! ${_LAZARUS_ECLASS} ]]; then
 _LAZARUS_ECLASS=1
 
 inherit multiprocessing
+[[ ${EAPI} == 8 ]] && inherit edo
 
 # @ECLASS_VARIABLE: LAZARUS_WIDGET
 # @PRE_INHERIT
@@ -98,9 +99,7 @@ lazarus_src_configure() {
 # @DESCRIPTION:
 # Call lazbuild with default arguments in addition to supplied arguments.
 elazbuild() {
-	set -- lazbuild ${LAZARUSARGS} ${@}
-	einfo "${@}"
-	"${@}" || die
+	edo lazbuild ${LAZARUSARGS} ${@}
 }
 
 fi
