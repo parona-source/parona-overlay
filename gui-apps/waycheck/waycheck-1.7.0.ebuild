@@ -5,7 +5,7 @@ EAPI=8
 
 inherit meson xdg
 
-DESCRIPTION="Simple GUI that displays the protocols implemented by a Wayland compositor."
+DESCRIPTION="Simple GUI that displays the protocols implemented by a Wayland compositor"
 HOMEPAGE="https://gitlab.freedesktop.org/serebit/waycheck/"
 SRC_URI="
 	https://gitlab.freedesktop.org/serebit/waycheck/-/archive/v${PV}/waycheck-v${PV}.tar.bz2

@@ -5,7 +5,7 @@ EAPI=8
 
 inherit elisp
 
-DESCRIPTION="Writeroom-mode: distraction-free writing for Emacs."
+DESCRIPTION="Writeroom-mode: distraction-free writing for Emacs"
 HOMEPAGE="https://github.com/joostkremers/writeroom-mode"
 COMMIT="cca2b4b3cfcfea1919e1870519d79ed1a69aa5e2"
 SRC_URI="

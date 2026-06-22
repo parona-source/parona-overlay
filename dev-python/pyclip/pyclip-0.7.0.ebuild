@@ -8,7 +8,7 @@ PYTHON_COMPAT=( python3_{12..15} )
 
 inherit distutils-r1 optfeature xdg-utils virtualx
 
-DESCRIPTION="Cross-platform Clipboard module for Python with binary support."
+DESCRIPTION="Cross-platform Clipboard module for Python with binary support"
 HOMEPAGE="
 	https://pypi.org/project/pyclip/
 	https://github.com/spyoungtech/pyclip

@@ -9,7 +9,7 @@ RUST_MIN_VER="1.82.0"
 
 inherit cargo
 
-DESCRIPTION="A utility and Rust library to convert SVG icons into Windows ICO files."
+DESCRIPTION="A utility and Rust library to convert SVG icons into Windows ICO files"
 HOMEPAGE="https://github.com/Ortham/svg_to_ico"
 SRC_URI="
 	https://github.com/Ortham/svg_to_ico/archive/refs/tags/${PV}.tar.gz

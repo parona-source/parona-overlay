@@ -5,7 +5,7 @@ EAPI=8
 
 inherit autotools
 
-DESCRIPTION="GZIP files indexer, compressor and data retriever."
+DESCRIPTION="GZIP files indexer, compressor and data retriever"
 HOMEPAGE="https://github.com/circulosmeos/gztool/"
 SRC_URI="https://github.com/circulosmeos/gztool/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
 

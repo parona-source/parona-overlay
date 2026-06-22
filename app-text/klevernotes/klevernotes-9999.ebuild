@@ -8,7 +8,7 @@ KFMIN="6.4"
 QTMIN="6.5"
 inherit ecm kde.org
 
-DESCRIPTION="A note-taking and management application using markdown."
+DESCRIPTION="A note-taking and management application using markdown"
 HOMEPAGE="
 	https://apps.kde.org/klevernotes/
 	https://invent.kde.org/office/klevernotes/

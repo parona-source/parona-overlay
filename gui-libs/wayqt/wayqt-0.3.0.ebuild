@@ -5,7 +5,7 @@ EAPI=8
 
 inherit flag-o-matic meson
 
-DESCRIPTION="A Qt-based wrapper for various wayland protocols."
+DESCRIPTION="A Qt-based wrapper for various wayland protocols"
 HOMEPAGE="https://gitlab.com/desktop-frameworks/wayqt"
 SRC_URI="
 	https://gitlab.com/desktop-frameworks/wayqt/-/archive/v${PV}/wayqt-v${PV}.tar.bz2

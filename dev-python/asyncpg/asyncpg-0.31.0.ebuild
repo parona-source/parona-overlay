@@ -11,7 +11,7 @@ inherit distutils-r1
 
 PGPROTO_COMMIT="1c3cad14d53c8f3088106f4eab8f612b7293569b"
 
-DESCRIPTION="A fast PostgreSQL Database Client Library for Python/asyncio."
+DESCRIPTION="A fast PostgreSQL Database Client Library for Python/asyncio"
 HOMEPAGE="
 	https://github.com/MagicStack/asyncpg/
 	https://pypi.org/project/asyncpg/

@@ -6,7 +6,7 @@ EAPI=8
 PYTHON_COMPAT=( python3_{12..14} )
 inherit cmake desktop python-any-r1 xdg
 
-DESCRIPTION="A modding utility for Starfield and some Elder Scrolls and Fallout games."
+DESCRIPTION="A modding utility for Starfield and some Elder Scrolls and Fallout games"
 HOMEPAGE="
 	https://loot.github.io/
 	https://github.com/loot/loot/

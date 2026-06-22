@@ -8,7 +8,7 @@ PYTHON_COMPAT=( python3_{12..15} )
 
 inherit distutils-r1 pypi
 
-DESCRIPTION="Humane command line arguments parser."
+DESCRIPTION="Humane command line arguments parser"
 HOMEPAGE="
 	https://github.com/jazzband/docopt-ng/
 	https://pypi.org/project/docopt-ng/

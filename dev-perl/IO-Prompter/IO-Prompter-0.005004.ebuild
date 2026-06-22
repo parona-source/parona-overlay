@@ -6,7 +6,7 @@ EAPI=8
 DIST_AUTHOR="DCONWAY"
 inherit perl-module
 
-DESCRIPTION="Prompt for input, read it, clean it, return it."
+DESCRIPTION="Prompt for input, read it, clean it, return it"
 
 LICENSE="|| ( Artistic GPL-1+ )"
 SLOT="0"

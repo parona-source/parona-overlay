@@ -8,7 +8,7 @@ inherit lazarus xdg
 
 MY_PV="${PV/_p/-}"
 
-DESCRIPTION="Graphical UI to help manage Linux overlays."
+DESCRIPTION="Graphical UI to help manage Linux overlays"
 HOMEPAGE="https://github.com/benjamimgois/goverlay"
 SRC_URI="
 	https://github.com/benjamimgois/goverlay/archive/refs/tags/${MY_PV}.tar.gz

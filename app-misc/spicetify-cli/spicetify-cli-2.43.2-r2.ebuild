@@ -48,7 +48,7 @@ whitelist_versions() {
 }
 whitelist_versions
 
-DESCRIPTION="Commandline tool to customize Spotify client."
+DESCRIPTION="Commandline tool to customize Spotify client"
 HOMEPAGE="https://spicetify.app/"
 SRC_URI="
 	https://github.com/spicetify/cli/archive/v${PV}.tar.gz -> ${P}.tar.gz

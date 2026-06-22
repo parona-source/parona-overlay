@@ -5,7 +5,7 @@ EAPI=9
 
 inherit verify-sig
 
-DESCRIPTION="Portable CLI tool for interacting with Git(Hub|Lab|Tea) from the command line."
+DESCRIPTION="Portable CLI tool for interacting with Git(Hub|Lab|Tea) from the command line"
 HOMEPAGE="https://herrhotzenplotz.de/gcli/"
 SRC_URI="
 	https://herrhotzenplotz.de/gcli/releases/${P}/${P}.tar.xz

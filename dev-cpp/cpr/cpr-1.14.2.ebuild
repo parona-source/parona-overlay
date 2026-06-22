@@ -5,7 +5,7 @@ EAPI=8
 
 inherit cmake
 
-DESCRIPTION="C++ Requests: Curl for People, a spiritual port of Python Requests."
+DESCRIPTION="C++ Requests: Curl for People, a spiritual port of Python Requests"
 HOMEPAGE="
 	https://docs.libcpr.org/
 	https://github.com/libcpr/cpr/

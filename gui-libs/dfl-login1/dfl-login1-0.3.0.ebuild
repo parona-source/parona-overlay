@@ -5,7 +5,7 @@ EAPI=8
 
 inherit meson
 
-DESCRIPTION="DFL Login1 class implements a part of the systemd logind dbus protocol."
+DESCRIPTION="DFL Login1 class implements a part of the systemd logind dbus protocol"
 HOMEPAGE="https://gitlab.com/desktop-frameworks/login1"
 SRC_URI="
 	https://gitlab.com/desktop-frameworks/login1/-/archive/v${PV}/login1-v${PV}.tar.bz2

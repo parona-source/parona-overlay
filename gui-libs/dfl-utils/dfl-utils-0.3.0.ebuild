@@ -5,7 +5,7 @@ EAPI=8
 
 inherit meson
 
-DESCRIPTION="This library provides single-instance Application classes for various utilities."
+DESCRIPTION="This library provides single-instance Application classes for various utilities"
 HOMEPAGE="https://gitlab.com/desktop-frameworks/utils"
 SRC_URI="
 	https://gitlab.com/desktop-frameworks/utils/-/archive/v${PV}/utils-v${PV}.tar.bz2

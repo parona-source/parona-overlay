@@ -5,7 +5,7 @@ EAPI=8
 
 inherit meson
 
-DESCRIPTION="This library provides a thin wrapper around QApplication and the rest."
+DESCRIPTION="This library provides a thin wrapper around QApplication and the rest"
 HOMEPAGE="https://gitlab.com/desktop-frameworks/applications"
 SRC_URI="
 	https://gitlab.com/desktop-frameworks/applications/-/archive/v${PV}/applications-v${PV}.tar.bz2

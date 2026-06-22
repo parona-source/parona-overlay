@@ -5,7 +5,7 @@ EAPI=8
 
 inherit meson
 
-DESCRIPTION="Two very simple classes for IPC. Used by DFL::Application."
+DESCRIPTION="Two very simple classes for IPC. Used by DFL::Application"
 HOMEPAGE="https://gitlab.com/desktop-frameworks/ipc"
 SRC_URI="
 	https://gitlab.com/desktop-frameworks/ipc/-/archive/v${PV}/ipc-v${PV}.tar.bz2

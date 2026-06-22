@@ -14,7 +14,7 @@ inherit go-module systemd
 #$ pnpm run build
 #$ XZ_OPT='-T0 -9' tar -acf project-1.0-dist.tar.xz dist
 
-DESCRIPTION="The to-do app to organize your life."
+DESCRIPTION="The to-do app to organize your life"
 HOMEPAGE="
 	https://vikunja.io/
 	https://kolaente.dev/vikunja/vikunja/

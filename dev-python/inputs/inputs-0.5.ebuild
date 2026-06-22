@@ -8,7 +8,7 @@ PYTHON_COMPAT=( python3_{12..15} )
 
 inherit distutils-r1
 
-DESCRIPTION="Cross-platform Python support for keyboards, mice and gamepads."
+DESCRIPTION="Cross-platform Python support for keyboards, mice and gamepads"
 HOMEPAGE="
 	https://pypi.org/project/inputs/
 	https://github.com/zeth/inputs

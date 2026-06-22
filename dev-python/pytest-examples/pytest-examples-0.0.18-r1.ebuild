@@ -8,7 +8,7 @@ PYTHON_COMPAT=( python3_{12..14} )
 PYPI_VERIFY_REPO=https://github.com/pydantic/pytest-examples
 inherit distutils-r1 pypi
 
-DESCRIPTION="Pytest plugin for testing Python code examples in docstrings and markdown files."
+DESCRIPTION="Pytest plugin for testing Python code examples in docstrings and markdown files"
 HOMEPAGE="
 	https://github.com/pydantic/pytest-examples/
 	https://pypi.org/project/pytest-examples/

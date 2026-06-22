@@ -6,7 +6,7 @@ EAPI=8
 DIST_AUTHOR="BLUEFEET"
 inherit perl-module
 
-DESCRIPTION="A complete GitLab API v4 client."
+DESCRIPTION="A complete GitLab API v4 client"
 
 LICENSE="|| ( Artistic GPL-1+ )"
 SLOT="0"

@@ -5,7 +5,7 @@ EAPI=8
 
 inherit elisp
 
-DESCRIPTION="Emacs mode for wrapping visual-line-mode buffers at fill-column."
+DESCRIPTION="Emacs mode for wrapping visual-line-mode buffers at fill-column"
 HOMEPAGE="https://codeberg.org/joostkremers/visual-fill-column"
 SRC_URI="
 	https://codeberg.org/joostkremers/visual-fill-column/archive/${PV}.tar.gz

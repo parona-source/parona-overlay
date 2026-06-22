@@ -9,7 +9,7 @@ PYTHON_COMPAT=( python3_{12..14} )
 
 inherit distutils-r1 pypi
 
-DESCRIPTION="Powerful and exquisite WSGI/ASGI framework/toolkit."
+DESCRIPTION="Powerful and exquisite WSGI/ASGI framework/toolkit"
 HOMEPAGE="
 	https://github.com/abersheeran/baize/
 	https://pypi.org/project/baize/

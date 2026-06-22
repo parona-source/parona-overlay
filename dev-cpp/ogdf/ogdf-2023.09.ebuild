@@ -5,7 +5,7 @@ EAPI=8
 
 inherit cmake unpacker
 
-DESCRIPTION="Open Graph algorithms and Data structure Framework."
+DESCRIPTION="Open Graph algorithms and Data structure Framework"
 HOMEPAGE="
 	https://ogdf.uos.de/
 	https://github.com/ogdf/ogdf/
