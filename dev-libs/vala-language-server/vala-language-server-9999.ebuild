@@ -37,16 +37,14 @@ BDEPEND="
 	man? ( >=app-text/scdoc-1.9.2 )
 "
 
-pkg_setup() {
-	vala_setup
-}
-
 src_prepare() {
 	sed -i '/version_file/,/^$/ { /command/d; /output/ { s/,/)/ } }' meson.build || die
 	default
 }
 
 src_configure() {
+	vala_setup
+
 	local emesonargs=(
 		$(meson_use debug debug_mem)
 		$(meson_feature man man_pages)
