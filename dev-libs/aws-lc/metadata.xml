@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>parona@protonmail.com</email>
+		<name>Alfred Wingate</name>
+	</maintainer>
+	<use>
+		<flag name="rust">Generate Rust bindings</flag>
+		<flag name="tools">Build tools</flag>
+	</use>
+	<upstream>
+		<remote-id type="github">aws/aws-lc</remote-id>
+	</upstream>
+</pkgmetadata>
