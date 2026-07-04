@@ -39,6 +39,14 @@ EPYTEST_DESELECT=(
 EPYTEST_PLUGINS=( pytest-asyncio )
 distutils_enable_tests pytest
 
+python_prepare_all() {
+	# avoid issues with mypy
+	sed -e 's/from mypyc.build/from noexist/' \
+		-i pdm_build.py || die
+
+	distutils-r1_python_prepare_all
+}
+
 python_test() {
 	rm -rf baize || die
 	epytest
