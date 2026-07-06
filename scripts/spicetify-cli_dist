@@ -18,6 +18,11 @@ if ! go version >/dev/null ; then
     echo "dev-lang/go missing"
     exit 1
 fi
+if ! pnpm --version >/dev/null ; then
+    echo "pnpm missing"
+    echo "either net-libs/nodejs[corepack] or locally install pnpm with npm"
+    exit 1
+fi
 if ! xz --version >/dev/null ; then
     echo "app-arch/xz-utils missing"
     exit 1
@@ -52,8 +57,12 @@ git fetch
 git checkout "v${version}"
 GOMODCACHE="${srcdir}"/go-mod go mod download -modcacherw
 XZ_OPT='-T0 -9' tar -acf "${outdir}/spicetify-cli-${version}-deps.tar.xz" go-mod
+pnpm install --frozen-lockfile
+pnpm build:wrapper
+XZ_OPT='-T0 -9' tar --xform="s:^:cli-${version}/:rS" -acf "${outdir}/spicetify-cli-${version}-js.tar.xz" jsHelper/spicetifyWrapper.js jsHelper/spicetifyWrapper.js.map
 
 gitlab_upload_package "${projectid}" spicetify-cli "${version}" "${outdir}/spicetify-cli-${version}-deps.tar.xz"
+gitlab_upload_package "${projectid}" spicetify-cli "${version}" "${outdir}/spicetify-cli-${version}-js.tar.xz"
 
 rm -rf "${outdir}"
 git clean -fdx
