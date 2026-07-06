@@ -49,6 +49,10 @@ EPYTEST_IGNORE=(
 	# https://github.com/solsticegamestudios/steam/commit/9004636d7cccd90ef914b86c1b11fa3f95605e96
 	"tests/test_webauth.py"
 )
+EPYTEST_DESELECT=(
+	# broken by newer protobuf
+	"tests/test_utils.py::Util_Proto"
+)
 
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest

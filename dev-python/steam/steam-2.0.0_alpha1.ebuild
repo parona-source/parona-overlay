@@ -47,6 +47,10 @@ EPYTEST_IGNORE=(
 	# Don't care about the client, it require gevent which is problematic
 	"tests/test_core_cm.py"
 )
+EPYTEST_DESELECT=(
+	# broken by newer protobuf
+	"tests/test_utils.py::Util_Proto"
+)
 
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
