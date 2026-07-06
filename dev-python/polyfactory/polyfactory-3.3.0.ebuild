@@ -28,7 +28,6 @@ BDEPEND="
 		>=dev-python/annotated-types-0.5.0[${PYTHON_USEDEP}]
 		>=dev-python/attrs-22.2.0[${PYTHON_USEDEP}]
 		dev-python/email-validator[${PYTHON_USEDEP}]
-		>=dev-python/eval-type-backport-0.2.2[${PYTHON_USEDEP}]
 		>=dev-python/greenlet-1[${PYTHON_USEDEP}]
 		>=dev-python/hypothesis-6.86.2[${PYTHON_USEDEP}]
 		>=dev-python/msgspec-0.20.0[${PYTHON_USEDEP}]
