@@ -30,6 +30,18 @@ PATCHES=(
 	"${FILESDIR}/pytest-examples-0.0.18-ruff-0.12.9.patch"
 )
 
+EPYTEST_DESELECT=(
+	# black has inconsistent formatting between versions
+	"tests/test_run_examples.py::test_black_error"
+	"tests/test_run_examples.py::test_black_error_dot_space"
+	"tests/test_run_examples.py::test_black_error_multiline"
+	# FIXME
+	"tests/test_run_examples.py::test_run_example_ok_fail"
+)
+EPYTEST_IGNORE=(
+	# black has inconsistent formatting between versions
+	"tests/test_black_error_multiline.py"
+)
 EPYTEST_PLUGINS=()
 EPYTEST_PLUGIN_AUTOLOAD=1
 distutils_enable_tests pytest
