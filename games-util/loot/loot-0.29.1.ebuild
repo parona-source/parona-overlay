@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{12..14} )
+PYTHON_COMPAT=( python3_{12..15} )
 inherit cmake desktop python-any-r1 xdg
 
 DESCRIPTION="A modding utility for Starfield and some Elder Scrolls and Fallout games"
