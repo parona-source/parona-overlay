@@ -15,11 +15,12 @@ whitelist_versions() {
 	local version_spec version1 version2
 	local -a deps
 
-	SPOTIFY_VERSIONS=
+	local SPOTIFY_VERSIONS=
 
 	# Iterate in reverse for elog
+	local index
 	for ((index = $(( ${#WHITELIST_VERSIONS[@]} - 1 )); index >= 0; index--)); do
-		read -r version_spec version1 version2 <<< "${WHITELIST_VERSIONS[${index}]}"
+		read -rd '' version_spec version1 version2 < <(printf %s "${WHITELIST_VERSIONS[${index}]}")
 
 		case ${version_spec} in
 			"<>")
@@ -47,6 +48,7 @@ whitelist_versions() {
 	RDEPEND=" || ( ${deps[@]} )"
 }
 whitelist_versions
+unset WHITELIST_VERSIONS whitelist_versions
 
 DESCRIPTION="Commandline tool to customize Spotify client"
 HOMEPAGE="https://spicetify.app/"
