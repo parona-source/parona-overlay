@@ -5,4 +5,5 @@
 # I haven't been keeping up with updates.
 # Masked until I get them sorted out.
 <app-containers/waydroid-1.6
+sci-ml/whispercpp
 <www-apps/vikunja-2
