@@ -3,7 +3,7 @@
 
 EAPI=8
 
-LLVM_COMPAT=( 18 19 20 21 )
+LLVM_COMPAT=( {18..22} )
 
 inherit cmake edo flag-o-matic linux-info llvm-r2 shell-completion
 
