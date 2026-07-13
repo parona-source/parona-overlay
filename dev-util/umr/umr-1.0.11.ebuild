@@ -5,7 +5,7 @@ EAPI=8
 
 LLVM_COMPAT=( 18 19 20 21 )
 
-inherit bash-completion-r1 cmake edo flag-o-matic linux-info llvm-r2
+inherit cmake edo flag-o-matic linux-info llvm-r2 shell-completion
 
 DESCRIPTION="umr is a userspace debugging and diagnostic tool for AMD GPUs"
 HOMEPAGE="https://gitlab.freedesktop.org/tomstdenis/umr/"
