@@ -21,7 +21,7 @@ IUSE="test"
 RESTRICT="test" # broken tests
 
 COMMON_DEPEND="
-	dev-cpp/args
+	<dev-cpp/args-6.5
 	dev-cpp/nlohmann_json
 	=gui-libs/ftxui-7*:=
 "
