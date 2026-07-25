@@ -2,7 +2,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
 # Alfred Wingate <parona@protonmail.com> (2026-07-26)
-# Lost interest. Will remove in a month or so.
+# Archived upstream. Unclear future.
+# Will remove in a month or so.
+games-util/nexusmodsapp
+
+# Alfred Wingate <parona@protonmail.com> (2026-07-26)
+# Lost interest.
+# Will remove in a month or so.
 net-im/discord-ptb
 
 # Alfred Wingate <parona@protonmail.com> (2026-04-22)
