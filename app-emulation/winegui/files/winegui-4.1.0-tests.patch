@@ -1,0 +1,74 @@
+From bd1e8af4b6a514541e8eaff45eb2e2dae63385c7 Mon Sep 17 00:00:00 2001
+From: Alfred Wingate <parona@protonmail.com>
+Date: Sun, 26 Jul 2026 00:32:51 +0300
+Subject: [PATCH] Fixup tests against system gtest. Make building with tests
+ easier.
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -153,7 +153,7 @@ set(SOURCES
+   ${HEADERS}
+ )
+ 
+-if(NOT UNITTEST)
++if(TRUE)
+   # Install and recompile glib gsettings schema
+   add_schema("org.melroy.winegui.gschema.xml" GSCHEMA_RING)
+ 
+@@ -187,7 +187,10 @@ if(NOT UNITTEST)
+     COMMENT "Starting up..." )
+ 
+ ## Below for Unit testing only ##
+-else()
++endif()
++if(UNITTEST)
++  enable_testing()
++
+   # Build separate libraries for unit testing
+   add_library(${PROJECT_TEST_TARGET_LIB}-bottle-config STATIC
+     src/bottle_config_file.cc
+--- a/tst/CMakeLists.txt
++++ b/tst/CMakeLists.txt
+@@ -2,12 +2,11 @@ include(FetchContent)
+ FetchContent_Declare(
+   googletest
+   URL https://github.com/google/googletest/archive/52eb8108c5bdec04579160ae17225d66034bd723.zip
++  FIND_PACKAGE_ARGS NAMES GTest
+ )
+ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+ FetchContent_MakeAvailable(googletest)
+ 
+-enable_testing()
+-
+ add_executable(bottle_config_migration_test
+   bottle_config_migration_test.cc
+ )
+@@ -19,7 +18,7 @@ target_include_directories(bottle_config_migration_test PRIVATE
+ )
+ target_link_libraries(bottle_config_migration_test PRIVATE
+   ${PROJECT_TEST_TARGET_LIB}-bottle-config
+-  gtest_main
++  GTest::gtest_main
+ )
+ add_test(NAME bottle_config_migration_test COMMAND bottle_config_migration_test)
+ 
+@@ -34,7 +33,7 @@ target_include_directories(helper_test PRIVATE
+ )
+ target_link_libraries(helper_test PRIVATE
+   ${PROJECT_TEST_TARGET_LIB}-bottle-config
+-  gtest_main
++  GTest::gtest_main
+ )
+ add_test(NAME helper_test COMMAND helper_test)
+ 
+@@ -49,7 +48,7 @@ target_include_directories(wine_runner_test PRIVATE
+ )
+ target_link_libraries(wine_runner_test PRIVATE
+   ${PROJECT_TEST_TARGET_LIB}-bottle-config
+-  gtest_main
++  GTest::gtest_main
+ )
+ add_test(NAME wine_runner_test COMMAND wine_runner_test)
+ 
+-- 
+2.55.0
