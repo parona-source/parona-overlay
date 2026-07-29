@@ -5,7 +5,7 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{12..14} )
+PYTHON_COMPAT=( python3_{12..15} )
 
 inherit distutils-r1
 
@@ -39,7 +39,9 @@ BDEPEND="
 		dev-python/distro[${PYTHON_USEDEP}]
 		dev-python/gssapi[${PYTHON_USEDEP}]
 		dev-python/k5test[${PYTHON_USEDEP}]
-		dev-python/uvloop[${PYTHON_USEDEP}]
+		$(python_gen_cond_dep '
+			dev-python/uvloop[${PYTHON_USEDEP}]
+		' python3_{12..14})
 	)
 "
 
