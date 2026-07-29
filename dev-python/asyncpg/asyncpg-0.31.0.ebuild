@@ -45,6 +45,7 @@ BDEPEND="
 	)
 "
 
+EPYTEST_XDIST=1
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
@@ -75,4 +76,10 @@ python_test() {
 	rm -rf asyncpg || die
 	local -x ASYNCPG_VERSION="${PV}"
 	epytest
+
+	local usedep="python_targets_${EPYTHON/./_}(-)"
+	if has_version "dev-python/uvloop[${usedep}]"; then
+		einfo "Running tests with uvloop enabled"
+		USE_UVLOOP=1 epytest
+	fi
 }
