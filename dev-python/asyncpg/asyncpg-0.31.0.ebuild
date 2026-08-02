@@ -30,6 +30,8 @@ KEYWORDS="~amd64"
 RDEPEND="
 	dev-db/postgresql
 "
+
+# TODO: python3.15 uvloop
 # pkg-resources: https://github.com/MagicStack/asyncpg/pull/1314
 BDEPEND="
 	<dev-python/cython-4.0.0[${PYTHON_USEDEP}]
