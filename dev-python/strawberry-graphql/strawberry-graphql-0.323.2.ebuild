@@ -44,6 +44,7 @@ BDEPEND="
 		dev-python/libcst[${PYTHON_USEDEP}]
 		dev-python/markupsafe[${PYTHON_USEDEP}]
 		dev-python/opentelemetry-api[${PYTHON_USEDEP}]
+		dev-python/protobuf[${PYTHON_USEDEP}]
 		dev-python/pygments[${PYTHON_USEDEP}]
 		dev-python/pyinstrument[${PYTHON_USEDEP}]
 		dev-python/python-multipart[${PYTHON_USEDEP}]
