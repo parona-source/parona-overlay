@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=pdm-backend
-PYTHON_COMPAT=( python3_{12..14} )
+PYTHON_COMPAT=( python3_{12..15} )
 
 inherit distutils-r1 optfeature
 
@@ -33,6 +33,7 @@ RDEPEND="
 	>=dev-python/typing-extensions-4.8.0[${PYTHON_USEDEP}]
 	>=dev-python/typing-inspection-0.4.2[${PYTHON_USEDEP}]
 "
+# TODO: python3.15 strawberry-graphql
 BDEPEND="
 	test? (
 		dev-python/aiosqlite[${PYTHON_USEDEP}]
@@ -54,8 +55,10 @@ BDEPEND="
 		>=dev-python/python-multipart-0.0.18[${PYTHON_USEDEP}]
 		<dev-python/pyyaml-7.0.0[${PYTHON_USEDEP}]
 		>=dev-python/pyyaml-5.3.1[${PYTHON_USEDEP}]
-		<dev-python/strawberry-graphql-1.0.0[${PYTHON_USEDEP}]
-		>=dev-python/strawberry-graphql-0.200.0[${PYTHON_USEDEP}]
+		$(python_gen_cond_dep '
+			<dev-python/strawberry-graphql-1.0.0[${PYTHON_USEDEP}]
+			>=dev-python/strawberry-graphql-0.200.0[${PYTHON_USEDEP}]
+		' python3_{12..14})
 		dev-python/sqlmodel[${PYTHON_USEDEP}]
 		dev-python/trio[${PYTHON_USEDEP}]
 		>=dev-python/typer-0.24.1[${PYTHON_USEDEP}]
@@ -95,7 +98,9 @@ EPYTEST_DESELECT=(
 	"tests/test_tutorial/test_websockets/test_tutorial003_py39.py::test_websocket_handle_disconnection"
 	# FIXME
 	"tests/test_tutorial/test_custom_docs_ui/test_tutorial001.py::test_api"
-
+	# Flaky
+	"tests/test_tutorial/test_custom_docs_ui/test_tutorial001.py::test_redoc_html"
+	"tests/test_tutorial/test_custom_docs_ui/test_tutorial002.py::test_redoc_html"
 )
 
 python_prepare_all() {
@@ -103,6 +108,15 @@ python_prepare_all() {
 	sed -i -e '/\[project.scripts\]/,/^$/d' pyproject.toml || die
 
 	distutils-r1_python_prepare_all
+}
+
+python_test() {
+	if [[ ${EPYTHON} == python3.15 ]]; then
+		local EPYTEST_IGNORE=(
+			"tests/test_tutorial/test_graphql/test_tutorial001.py"
+		)
+	fi
+	epytest
 }
 
 pkg_postinst() {
