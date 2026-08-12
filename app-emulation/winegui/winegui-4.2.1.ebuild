@@ -36,6 +36,7 @@ DEPEND="${RDEPEND}
 BDEPEND="
 	virtual/pkgconfig
 	doc? ( app-text/doxygen[dot] )
+	test?( virtual/wine )
 "
 
 PATCHES=(
