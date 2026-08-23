@@ -1,11 +1,6 @@
 # Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-# Alfred Wingate <parona@protonmail.com> (2026-08-03)
-# Going fully header only with installing basically nothing.
-# No revdeps. Removing in a month or so.
-dev-cpp/tinygltf
-
 # Alfred Wingate <parona@protonmail.com> (2026-04-22)
 # I haven't been keeping up with updates.
 # Masked until I get them sorted out.
