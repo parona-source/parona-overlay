@@ -6,11 +6,6 @@
 # No revdeps. Removing in a month or so.
 dev-cpp/tinygltf
 
-# Alfred Wingate <parona@protonmail.com> (2026-07-26)
-# Archived upstream. Unclear future.
-# Will remove in a month or so.
-games-util/nexusmodsapp
-
 # Alfred Wingate <parona@protonmail.com> (2026-04-22)
 # I haven't been keeping up with updates.
 # Masked until I get them sorted out.
