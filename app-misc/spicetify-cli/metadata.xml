@@ -5,6 +5,9 @@
 		<email>parona@protonmail.com</email>
 		<name>Alfred Wingate</name>
 	</maintainer>
+	<use>
+		<flag name="rust">Build the WIP rust version instead.</flag>
+	</use>
 	<upstream>
 		<remote-id type="github">spicetify/cli</remote-id>
 		<doc>https://spicetify.app/docs/getting-started/</doc>
