@@ -2,7 +2,7 @@
 set -e
 
 version="${1}"
-srcdir="${HOME}/sources/spicetify-cli"
+srcdir="${HOME}/sources/archive/spicetify-cli"
 projectid="32909921"
 
 if [[ -z ${version} ]]; then
