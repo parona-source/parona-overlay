@@ -7,49 +7,6 @@ inherit go-module
 
 MY_PN="cli"
 
-WHITELIST_VERSIONS=(
-	"<> 1.2.14 1.2.93"
-)
-
-whitelist_versions() {
-	local version_spec version1 version2
-	local -a deps
-
-	local SPOTIFY_VERSIONS=
-
-	# Iterate in reverse for elog
-	local index
-	for ((index = $(( ${#WHITELIST_VERSIONS[@]} - 1 )); index >= 0; index--)); do
-		read -rd '' version_spec version1 version2 < <(printf %s "${WHITELIST_VERSIONS[${index}]}")
-
-		case ${version_spec} in
-			"<>")
-				deps[$index]="( <media-sound/spotify-$(ver_cut 1-2 ${version2}).$(( $(ver_cut 3 ${version2}) + 1 )) >=media-sound/spotify-${version1} )"
-				SPOTIFY_VERSIONS+="${version1} -> ${version2}"
-				;;
-			"~")
-				deps[$index]="~media-sound/spotify-${version1}"
-				SPOTIFY_VERSIONS+="${version1}"
-				;;
-			*)
-				die "Invalid version specifier in WHITELIST_VERSIONS"
-				;;
-		esac
-
-		if [[ ${index} == 0 ]]; then
-			SPOTIFY_VERSIONS+=". "
-		elif [[ ${index} == 1 ]]; then
-			SPOTIFY_VERSIONS+=" and "
-		else
-			SPOTIFY_VERSIONS+=", "
-		fi
-	done
-
-	RDEPEND=" || ( ${deps[@]} )"
-}
-whitelist_versions
-unset WHITELIST_VERSIONS whitelist_versions
-
 DESCRIPTION="Commandline tool to customize Spotify client"
 HOMEPAGE="https://spicetify.app/"
 SRC_URI="
@@ -65,10 +22,7 @@ LICENSE="Apache-2.0 BSD LGPL-2.1 MIT"
 SLOT="0"
 KEYWORDS="~amd64"
 
-# no tests
-RESTRICT="test"
-
-RDEPEND+="
+RDEPEND="
 	sys-process/procps
 	x11-apps/xrdb
 	x11-misc/xdg-utils
@@ -79,6 +33,10 @@ INSTALLDIR="/opt/${PN}"
 
 src_compile() {
 	ego build -ldflags "-X main.version=${PV}"
+}
+
+src_test() {
+	ego test
 }
 
 src_install() {
@@ -98,9 +56,6 @@ pkg_postinst() {
 	elog "# chmod a+wr /opt/spotify/spotify-client/Apps -R"
 	elog ""
 	elog "WARNING: Do not run spicetify as root please"
-	elog ""
-	elog "Spicetify compatibility is limited to the following Spotify versions:"
-	elog " ${SPOTIFY_VERSIONS}"
 	elog ""
 	elog "Otherwise you can install spotify to a user modifiable location like as a flatpak:"
 	elog " https://spicetify.app/docs/advanced-usage/installation#spotify-installed-from-flatpak"
