@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{12..14} )
+PYTHON_COMPAT=( python3_{12..15} )
 inherit optfeature python-single-r1
 
 DESCRIPTION="Git credential helpers for Microsoft Outlook, Gmail, Yahoo, AOL and Proton Mail"
