@@ -1,0 +1,48 @@
+# Copyright 2024-2025 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+DISTUTILS_USE_PEP517=hatchling
+PYTHON_COMPAT=( python3_{12..15} )
+PYPI_VERIFY_REPO=https://github.com/pydantic/pytest-examples
+inherit distutils-r1 pypi
+
+DESCRIPTION="Pytest plugin for testing Python code examples in docstrings and markdown files"
+HOMEPAGE="
+	https://github.com/pydantic/pytest-examples/
+	https://pypi.org/project/pytest-examples/
+"
+
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="~amd64"
+
+RDEPEND="
+	>=dev-python/black-23[${PYTHON_USEDEP}]
+	>=dev-python/pytest-8.3.4[${PYTHON_USEDEP}]
+	>=dev-util/ruff-0.5.0
+"
+
+PATCHES=(
+	"${FILESDIR}/pytest-examples-0.0.14-revert-use-of-ruff-module.patch"
+	"${FILESDIR}/pytest-examples-0.0.18-pytest-8.4.patch"
+	"${FILESDIR}/pytest-examples-0.0.18-pytest-9.1.patch"
+	"${FILESDIR}/pytest-examples-0.0.18-ruff-0.16.patch"
+)
+
+EPYTEST_DESELECT=(
+	# black has inconsistent formatting between versions
+	"tests/test_run_examples.py::test_black_error"
+	"tests/test_run_examples.py::test_black_error_dot_space"
+	"tests/test_run_examples.py::test_black_error_multiline"
+	# FIXME
+	"tests/test_run_examples.py::test_run_example_ok_fail"
+)
+EPYTEST_IGNORE=(
+	# black has inconsistent formatting between versions
+	"tests/test_black_error_multiline.py"
+)
+EPYTEST_PLUGINS=()
+EPYTEST_PLUGIN_AUTOLOAD=1
+distutils_enable_tests pytest
