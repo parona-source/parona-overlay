@@ -19,7 +19,7 @@ esac
 if [[ ! ${_LAZARUS_ECLASS} ]]; then
 _LAZARUS_ECLASS=1
 
-inherit multiprocessing
+inherit flag-o-matic multiprocessing
 [[ ${EAPI} == 8 ]] && inherit edo
 
 # @ECLASS_VARIABLE: LAZARUS_WIDGET
@@ -62,10 +62,25 @@ fi
 # @DESCRIPTION:
 # Arguments to pass to Lazarus. Set by lazarus_src_configure.
 
+
 # @FUNCTION: lazarus_src_configure
 # @DESCRIPTION:
 # Configure options for fpc and lazarus.
 lazarus_src_configure() {
+	_handle_ldflags() {
+		for flag in $(raw-ldflags) ; do
+			echo "-k${flag}"
+		done
+	}
+
+	_handle_fpcflags() {
+		if [[ -n ${FPCFLAGS} ]]; then
+			for flag in ${FPCFLAGS}; do
+				echo "${flag}"
+			done
+		fi
+	}
+
 	# https://wiki.freepascal.org/Configuration_file
 	export PPC_CONFIG_PATH="${T}/fpc/"
 	mkdir -p "${PPC_CONFIG_PATH}" || die
@@ -75,11 +90,21 @@ lazarus_src_configure() {
 
 	# Then override options from that system wide configuration
 
-	# Disable stripping. The package manager handles stripping and keeping the debug symbols.
-	-Xs-
+	# Useful to see what tools are invoked
+	-vx
 
-	# Enable build-id's
-	-k --build-id
+	# Disable stripping. The package manager handles stripping and keeping or splitting the debug symbols.
+	-Xs-
+	-Xg-
+
+	# Enable build-id's in the linker
+	-k--build-id
+
+	# Append user LDFLAGS
+	$(_handle_ldflags)
+
+	# Append user FPCFLAGS
+	$(_handle_fpcflags)
 	EOF
 
 	local _lazarusargs=(
