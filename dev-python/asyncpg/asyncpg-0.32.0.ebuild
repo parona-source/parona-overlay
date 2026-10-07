@@ -1,0 +1,88 @@
+# Copyright 2024-2026 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+DISTUTILS_EXT=1
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{12..15} )
+
+inherit distutils-r1
+
+PGPROTO_COMMIT="1c3cad14d53c8f3088106f4eab8f612b7293569b"
+
+DESCRIPTION="A fast PostgreSQL Database Client Library for Python/asyncio"
+HOMEPAGE="
+	https://github.com/MagicStack/asyncpg/
+	https://pypi.org/project/asyncpg/
+"
+SRC_URI="
+	https://github.com/MagicStack/asyncpg/archive/refs/tags/v${PV}.tar.gz
+		-> ${P}.gh.tar.gz
+	https://github.com/MagicStack/py-pgproto/archive/${PGPROTO_COMMIT}.tar.gz
+		-> py-pgproto-${PGPROTO_COMMIT}.tar.gz
+"
+
+LICENSE="Apache-2.0"
+SLOT="0"
+KEYWORDS="~amd64"
+
+RDEPEND="
+	dev-db/postgresql
+"
+
+# TODO: python3.15 uvloop
+# pkg-resources: https://github.com/MagicStack/asyncpg/pull/1314
+BDEPEND="
+	<dev-python/cython-4.0.0[${PYTHON_USEDEP}]
+	>=dev-python/cython-3.2.1[${PYTHON_USEDEP}]
+	>=dev-python/packaging-24.0[${PYTHON_USEDEP}]
+	dev-python/pkg-resources[${PYTHON_USEDEP}]
+	test? (
+		dev-python/distro[${PYTHON_USEDEP}]
+		dev-python/gssapi[${PYTHON_USEDEP}]
+		dev-python/k5test[${PYTHON_USEDEP}]
+		$(python_gen_cond_dep '
+			dev-python/uvloop[${PYTHON_USEDEP}]
+		' python3_{12..14})
+	)
+"
+
+EPYTEST_XDIST=1
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
+
+EPYTEST_DESELECT=(
+	# TODO: kerberos testing needs work
+	# asyncpg.exceptions._base.InternalClientError: unexpected error while
+	# performing authentication: Major (851968): Unspecified GSS failure.  Minor
+	# code may provide more information, Minor (2529638919): Server
+	# krbtgt/HOMENETWORK@KRBTEST.COM not found in Kerberos database
+	"tests/test_connect.py::TestGssAuthentication::test_auth_gssapi_bad_user"
+	"tests/test_connect.py::TestGssAuthentication::test_auth_gssapi_ok"
+	# https://github.com/MagicStack/asyncpg/issues/1236
+	"tests/test_connect.py::TestConnectParams::test_connect_params"
+)
+
+EPYTEST_IGNORE=(
+	# Uses mypy and isnt relevant from a downstream perspective
+	"tests/test__sourcecode.py"
+)
+
+src_prepare() {
+	default
+
+	mv -T "${WORKDIR}"/py-pgproto-${PGPROTO_COMMIT} "${S}"/asyncpg/pgproto || die
+}
+
+python_test() {
+	rm -rf asyncpg || die
+	local -x ASYNCPG_VERSION="${PV}"
+	epytest
+
+	local usedep="python_targets_${EPYTHON/./_}(-)"
+	if has_version "dev-python/uvloop[${usedep}]"; then
+		einfo "Running tests with uvloop enabled"
+		USE_UVLOOP=1 epytest
+	fi
+}
