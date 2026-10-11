@@ -20,6 +20,7 @@ S="${WORKDIR}/${PN}-${PV/_/-}"
 
 LICENSE="MIT"
 SLOT="0"
+KEYWORDS="~amd64"
 
 RESTRICT="!test? ( test )"
 
