@@ -8,4 +8,7 @@
 	<upstream>
 		<remote-id type="github">libcpr/cpr</remote-id>
 	</upstream>
+	<use>
+		<flag name="boost">Use Boost.Asio as the Thread pool backend (requires <pkg>dev-libs/boost</pkg>)</flag>
+	</use>
 </pkgmetadata>
