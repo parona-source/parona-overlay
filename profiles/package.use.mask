@@ -5,5 +5,5 @@
 
 # Alfred Wingate <parona@protonmail.com> (2023-10-25)
 # pgo is broken and gets stuck.
->=www-client/icecat-115.0.0 pgo
+=www-client/icecat-140* pgo
 
