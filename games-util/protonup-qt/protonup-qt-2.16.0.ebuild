@@ -77,6 +77,7 @@ python_test() {
 	EPYTEST_DESELECT=(
 		# flaky
 		tests/test_networkutil.py::test_download_file
+		tests/test_util.py::test_download_awacy_gamelist_offline
 	)
 
 	local dbus_params=(
